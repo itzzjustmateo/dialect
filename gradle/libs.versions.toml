@@ -1,0 +1,30 @@
+[versions]
+paper-api = "1.21.11-R0.1-SNAPSHOT"
+minecraft = "1.21.11"
+adventure-api = "4.17.0"
+adventure-minimessage = "4.17.0"
+jackson-core = "2.17.1"
+jackson-databind = "2.17.1"
+jackson-dataformat-yaml = "2.17.1"
+caffeine = "3.1.8"
+jedis = "5.1.0"
+shadow = "8.3.6"
+run-task = "3.0.2"
+junit-jupiter = "5.10.2"
+mockito-core = "5.11.0"
+
+[libraries]
+paper-api = { module = "io.papermc.paper:paper-api", version.ref = "paper-api" }
+adventure-api = { module = "net.kyori:adventure-api", version.ref = "adventure-api" }
+adventure-minimessage = { module = "net.kyori:adventure-text-minimessage", version.ref = "adventure-minimessage" }
+jackson-core = { module = "com.fasterxml.jackson.core:jackson-core", version.ref = "jackson-core" }
+jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson-databind" }
+jackson-dataformat-yaml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml", version.ref = "jackson-dataformat-yaml" }
+caffeine = { module = "com.github.ben-manes.caffeine:caffeine", version.ref = "caffeine" }
+jedis = { module = "redis.clients:jedis", version.ref = "jedis" }
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit-jupiter" }
+mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito-core" }
+
+[plugins]
+run-paper = { id = "xyz.jpenilla.run-paper", version.ref = "run-task" }
+shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }

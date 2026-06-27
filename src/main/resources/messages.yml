@@ -1,0 +1,15 @@
+# ─────────────────────────────────────────────
+# Dialect Messages
+# ─────────────────────────────────────────────
+# All messages support MiniMessage formatting.
+# See: https://docs.advntr.dev/minimessage/format.html
+
+prefix: "<gradient:#4facfe:#00f2fe>[Dialect]</gradient> "
+violation_warning: "<red>Your message was not sent because it violates the server language policy.</red>"
+translation_format: "<gray>[Translated from {from}]: {message}</gray>"
+no_permission: "<red>You do not have permission to execute this command.</red>"
+reload_success: "<green>Configuration and caches successfully reloaded.</green>"
+correction_suggested: "<gold>Did you mean:</gold> <click:suggest_command:'{correction}'><hover:show_text:'<gray>Click to accept</gray>'>{correction}</hover></click>"
+api_error: "<red>An error occurred while processing your request. Please try again later.</red>"
+rate_limited: "<red>Too many requests. Please wait before sending another message.</red>"
+ai_unavailable: "<red>The AI service is unavailable. Please try again later.</red>"

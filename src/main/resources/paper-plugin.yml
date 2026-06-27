@@ -1,0 +1,55 @@
+name: Dialect
+description: $description
+prefix: "Dialect"
+version: '${version}'
+
+main: com.vomlabs.dialect.Dialect
+api-version: '1.21.11'
+load: POSTWORLD
+
+authors: [ VOMLabs ]
+website: https://vomlabs.com
+
+permissions:
+  dialect.bypass:
+    description: Allows bypassing all chat evaluations, detection, and translation processing
+    default: op
+  dialect.admin.*:
+    description: Wildcard node granting access to all diagnostic, monitoring, and structural command routes
+    default: op
+    children:
+      dialect.admin.reload: true
+      dialect.admin.status: true
+      dialect.admin.detect: true
+      dialect.admin.translate: true
+      dialect.admin.cache: true
+  dialect.admin.reload:
+    description: Allows reloading the plugin configuration
+    default: op
+  dialect.admin.status:
+    description: Allows viewing plugin status
+    default: op
+  dialect.admin.detect:
+    description: Allows manually detecting language of text
+    default: op
+  dialect.admin.translate:
+    description: Allows manually translating text
+    default: op
+  dialect.admin.cache:
+    description: Allows managing plugin cache
+    default: op
+  dialect.command.language:
+    description: Allows using /language command
+    default: true
+
+commands:
+  dialect:
+    description: Main Dialect command
+    usage: /dialect <help|reload|status|detect|translate|cache>
+    permission: dialect.admin.*
+    aliases: [dl]
+  language:
+    description: Set your preferred language
+    usage: /language [code]
+    permission: dialect.command.language
+    aliases: [lang]
