@@ -24,7 +24,7 @@ class OpenRouterClientTest {
     @BeforeEach
     void setUp() {
         config = new DialectConfig.AIConfig(
-            true, "test-key",
+            true, "openrouter", "test-key",
             "https://openrouter.ai/api/v1/chat/completions",
             "meta-llama/llama-3-8b-instruct:free",
             0.1, 5, 3, 500
@@ -35,7 +35,7 @@ class OpenRouterClientTest {
     @Test
     void testEmptyApiKeyFails() {
         DialectConfig.AIConfig noKey = new DialectConfig.AIConfig(
-            true, "", "https://openrouter.ai/api/v1/chat/completions",
+            true, "openrouter", "", "https://openrouter.ai/api/v1/chat/completions",
             "model", 0.1, 5, 3, 500
         );
         OpenRouterClient badClient = new OpenRouterClient(noKey, LOGGER);
@@ -50,7 +50,7 @@ class OpenRouterClientTest {
     @Test
     void testDefaultKeyFails() {
         DialectConfig.AIConfig defaultKey = new DialectConfig.AIConfig(
-            true, "your-key-here", "https://openrouter.ai/api/v1/chat/completions",
+            true, "openrouter", "your-key-here", "https://openrouter.ai/api/v1/chat/completions",
             "model", 0.1, 5, 3, 500
         );
         OpenRouterClient badClient = new OpenRouterClient(defaultKey, LOGGER);
@@ -79,56 +79,56 @@ class OpenRouterClientTest {
     @Test
     void testExtractTextField() {
         JsonNode node = MAPPER.createObjectNode().put("language", "en");
-        String result = client.extractTextField(node, "language");
+        String result = AiProvider.extractTextField(node, "language");
         assertEquals("en", result);
     }
 
     @Test
     void testExtractTextFieldMissing() {
         JsonNode node = MAPPER.createObjectNode();
-        String result = client.extractTextField(node, "nonexistent");
+        String result = AiProvider.extractTextField(node, "nonexistent");
         assertNull(result);
     }
 
     @Test
     void testExtractDoubleField() {
         JsonNode node = MAPPER.createObjectNode().put("confidence", 0.95);
-        double result = client.extractDoubleField(node, "confidence", 0.0);
+        double result = AiProvider.extractDoubleField(node, "confidence", 0.0);
         assertEquals(0.95, result, 0.001);
     }
 
     @Test
     void testExtractDoubleFieldDefault() {
         JsonNode node = MAPPER.createObjectNode();
-        double result = client.extractDoubleField(node, "missing", 0.5);
+        double result = AiProvider.extractDoubleField(node, "missing", 0.5);
         assertEquals(0.5, result, 0.001);
     }
 
     @Test
     void testExtractBooleanField() {
         JsonNode node = MAPPER.createObjectNode().put("slang", true);
-        boolean result = client.extractBooleanField(node, "slang", false);
+        boolean result = AiProvider.extractBooleanField(node, "slang", false);
         assertTrue(result);
     }
 
     @Test
     void testExtractBooleanFieldDefault() {
         JsonNode node = MAPPER.createObjectNode();
-        boolean result = client.extractBooleanField(node, "missing", true);
+        boolean result = AiProvider.extractBooleanField(node, "missing", true);
         assertTrue(result);
     }
 
     @Test
     void testExtractAnalysis() {
         String json = "{\"detected_language\": \"en\", \"confidence\": 0.95}";
-        var result = client.extractAnalysis(json);
+        var result = AiProvider.extractAnalysis(json);
         assertTrue(result.isPresent());
         assertEquals("en", result.get().get("detected_language").asText());
     }
 
     @Test
     void testExtractAnalysisInvalid() {
-        var result = client.extractAnalysis("not json");
+        var result = AiProvider.extractAnalysis("not json");
         assertFalse(result.isPresent());
     }
 

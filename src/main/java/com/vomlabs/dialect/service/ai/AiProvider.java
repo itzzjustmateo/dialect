@@ -1,7 +1,9 @@
 package com.vomlabs.dialect.service.ai;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 public interface AiProvider {
@@ -27,5 +29,13 @@ public interface AiProvider {
     static boolean extractBooleanField(JsonNode node, String fieldName, boolean defaultValue) {
         JsonNode field = node != null ? node.get(fieldName) : null;
         return field != null && field.isBoolean() ? field.asBoolean() : defaultValue;
+    }
+
+    static Optional<JsonNode> extractAnalysis(String json) {
+        try {
+            return Optional.of(new ObjectMapper().readTree(json));
+        } catch (Exception e) {
+            return Optional.empty();
+        }
     }
 }

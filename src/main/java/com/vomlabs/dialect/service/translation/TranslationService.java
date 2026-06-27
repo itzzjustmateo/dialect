@@ -2,6 +2,7 @@ package com.vomlabs.dialect.service.translation;
 
 import com.vomlabs.dialect.config.DialectConfig;
 import com.vomlabs.dialect.config.MessagesConfig;
+import com.vomlabs.dialect.service.ai.AiProvider;
 import com.vomlabs.dialect.service.ai.OpenRouterClient;
 import com.vomlabs.dialect.service.ai.PromptBuilder;
 import com.vomlabs.dialect.util.TextSanitizer;
@@ -70,7 +71,7 @@ public class TranslationService {
             PromptBuilder.createTranslationPrompt(text, sourceLanguage, targetLanguage).build()
         ).thenApply(response -> {
             try {
-                String translated = openRouterClient.extractTextField(response, "translated_text");
+                String translated = AiProvider.extractTextField(response, "translated_text");
                 if (translated != null && !translated.isBlank()) {
                     return translated;
                 }

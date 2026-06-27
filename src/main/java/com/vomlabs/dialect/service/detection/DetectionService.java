@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.vomlabs.dialect.config.DialectConfig;
 import com.vomlabs.dialect.model.ChatMessage;
 import com.vomlabs.dialect.model.Language;
+import com.vomlabs.dialect.service.ai.AiProvider;
 import com.vomlabs.dialect.service.ai.OpenRouterClient;
 import com.vomlabs.dialect.service.ai.PromptBuilder;
 import com.vomlabs.dialect.service.cache.CacheService;
@@ -67,11 +68,11 @@ public class DetectionService {
 
     private ChatMessage parseDetectionResponse(ChatMessage original, JsonNode response, String cacheKey) {
         try {
-            String detectedCode = openRouterClient.extractTextField(response, "detected_language");
-            double confidence = openRouterClient.extractDoubleField(response, "confidence", 0.0);
-            boolean containsSlang = openRouterClient.extractBooleanField(response, "contains_slang", false);
-            boolean isValidSlang = openRouterClient.extractBooleanField(response, "is_valid_slang_in_context", true);
-            String normalizedTranslation = openRouterClient.extractTextField(response, "normalized_translation");
+            String detectedCode = AiProvider.extractTextField(response, "detected_language");
+            double confidence = AiProvider.extractDoubleField(response, "confidence", 0.0);
+            boolean containsSlang = AiProvider.extractBooleanField(response, "contains_slang", false);
+            boolean isValidSlang = AiProvider.extractBooleanField(response, "is_valid_slang_in_context", true);
+            String normalizedTranslation = AiProvider.extractTextField(response, "normalized_translation");
 
             Optional<Language> detectedLanguage = Language.fromCode(detectedCode != null ? detectedCode : "");
 

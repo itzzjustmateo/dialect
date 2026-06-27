@@ -3,6 +3,7 @@ package com.vomlabs.dialect.service.moderation;
 import com.vomlabs.dialect.model.Action;
 import com.vomlabs.dialect.model.ChatMessage;
 import com.vomlabs.dialect.config.DialectConfig;
+import com.vomlabs.dialect.service.ai.AiProvider;
 import com.vomlabs.dialect.service.ai.OpenRouterClient;
 import com.vomlabs.dialect.service.ai.PromptBuilder;
 import com.vomlabs.dialect.service.cache.CacheService;
@@ -66,9 +67,9 @@ public class ModerationService {
             PromptBuilder.createModerationPrompt(sanitized, langCode, buildRulesString()).build()
         ).thenApply(response -> {
             try {
-                boolean isAllowed = openRouterClient.extractBooleanField(response, "is_allowed", true);
-                String reason = openRouterClient.extractTextField(response, "reason");
-                String severity = openRouterClient.extractTextField(response, "severity");
+                boolean isAllowed = AiProvider.extractBooleanField(response, "is_allowed", true);
+                String reason = AiProvider.extractTextField(response, "reason");
+                String severity = AiProvider.extractTextField(response, "severity");
 
                 AiModerationResult result = new AiModerationResult(isAllowed, reason, severity);
 
