@@ -5,13 +5,14 @@
 ai:
   # Whether to use AI features (detection, translation, moderation)
   enabled: true
-  # Your OpenRouter API key from https://openrouter.ai/keys
-  # If left empty, the plugin falls back to DeepL for translation (configure below)
-  openrouter_key: ""
-  # OpenRouter API endpoint
-  endpoint: "https://openrouter.ai/api/v1/chat/completions"
-  # Model to use for all AI operations
-  model: "meta-llama/llama-3-8b-instruct:free"
+  # AI provider: openrouter, openai, anthropic, gemini, huggingface
+  provider: "openrouter"
+  # API key for the selected provider
+  api_key: ""
+  # API endpoint (leave empty for provider default)
+  endpoint: ""
+  # Model to use (leave empty for provider default)
+  model: ""
   # Model temperature (lower = more deterministic)
   temperature: 0.1
   # Request timeout in seconds
@@ -73,6 +74,7 @@ redis:
   timeout_seconds: 2
   # Whether to use SSL (rediss://)
   use_ssl: false
+
 
 # Chat format configuration
 chat_format:

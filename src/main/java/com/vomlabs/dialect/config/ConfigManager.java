@@ -115,15 +115,34 @@ public class ConfigManager {
         }
     }
 
+    private static java.util.Map<String, String[]> PROVIDER_DEFAULTS = java.util.Map.of(
+        "openrouter", new String[]{"https://openrouter.ai/api/v1/chat/completions", "meta-llama/llama-3-8b-instruct:free"},
+        "openai", new String[]{"https://api.openai.com/v1/chat/completions", "gpt-4o-mini"},
+        "anthropic", new String[]{"https://api.anthropic.com/v1/messages", "claude-3-haiku-20240307"},
+        "gemini", new String[]{"https://generativelanguage.googleapis.com/v1beta/models", "gemini-2.0-flash"},
+        "huggingface", new String[]{"https://api-inference.huggingface.co/models", "mistralai/Mistral-7B-Instruct-v0.3"}
+    );
+
     private DialectConfig.AIConfig parseAI(JsonNode root) {
         JsonNode node = root.get("ai");
-        if (node == null) return new DialectConfig.AIConfig(true, "", "https://openrouter.ai/api/v1/chat/completions", "meta-llama/llama-3-8b-instruct:free", 0.1, 5, 3, 500);
+        if (node == null) return new DialectConfig.AIConfig(true, "openrouter", "", "", "", 0.1, 5, 3, 500);
+
+        String provider = getString(node, "provider", "openrouter");
+        String[] defaults = PROVIDER_DEFAULTS.getOrDefault(provider, PROVIDER_DEFAULTS.get("openrouter"));
+        String defaultEndpoint = defaults[0];
+        String defaultModel = defaults[1];
+
+        String apiKey = getString(node, "api_key", "");
+        if (apiKey.isBlank()) {
+            apiKey = getString(node, "openrouter_key", "");
+        }
 
         return new DialectConfig.AIConfig(
             getBoolean(node, "enabled", true),
-            getString(node, "openrouter_key", ""),
-            getString(node, "endpoint", "https://openrouter.ai/api/v1/chat/completions"),
-            getString(node, "model", "meta-llama/llama-3-8b-instruct:free"),
+            provider,
+            apiKey,
+            getString(node, "endpoint", defaultEndpoint),
+            getString(node, "model", defaultModel),
             getDouble(node, "temperature", 0.1),
             getInt(node, "timeout_seconds", 5),
             getInt(node, "max_retries", 3),
@@ -224,7 +243,7 @@ public class ConfigManager {
 
     private DialectConfig loadDefaultConfig() {
         return new DialectConfig(
-            new DialectConfig.AIConfig(true, "", "https://openrouter.ai/api/v1/chat/completions", "meta-llama/llama-3-8b-instruct:free", 0.1, 5, 3, 500),
+            new DialectConfig.AIConfig(true, "openrouter", "", "", "", 0.1, 5, 3, 500),
             new DialectConfig.DeepLConfig("", true, 5),
             new DialectConfig.LanguageConfig("WHITELIST", List.of("en", "de"), "en", Action.WARN, 0.75),
             new DialectConfig.CacheConfig(10000, 30),

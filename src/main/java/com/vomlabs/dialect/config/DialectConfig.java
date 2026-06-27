@@ -15,7 +15,7 @@ public record DialectConfig(
     ChatFormatConfig chatFormat
 ) {
     public DialectConfig {
-        if (ai == null) ai = new AIConfig(true, "", "https://openrouter.ai/api/v1/chat/completions", "meta-llama/llama-3-8b-instruct:free", 0.1, 5, 3, 500);
+        if (ai == null) ai = new AIConfig(true, "openrouter", "", "", "", 0.1, 5, 3, 500);
         if (deepl == null) deepl = new DeepLConfig("", true, 5);
         if (languages == null) languages = new LanguageConfig("WHITELIST", List.of("en", "de"), "en", Action.WARN, 0.75);
         if (cache == null) cache = new CacheConfig(10000, 30);
@@ -26,7 +26,8 @@ public record DialectConfig(
 
     public record AIConfig(
         boolean enabled,
-        String openrouterKey,
+        String provider,
+        String apiKey,
         String endpoint,
         String model,
         double temperature,
@@ -35,7 +36,7 @@ public record DialectConfig(
         int backoffBaseMs
     ) {
         public boolean isConfigured() {
-            return enabled && openrouterKey != null && !openrouterKey.isBlank() && !openrouterKey.equals("your-key-here");
+            return enabled && apiKey != null && !apiKey.isBlank() && !apiKey.equals("your-key-here");
         }
     }
 
@@ -59,20 +60,11 @@ public record DialectConfig(
         public Set<String> allowedSet() {
             return allowed == null ? Set.of() : new HashSet<>(allowed);
         }
-
-        public boolean isWhitelist() {
-            return "WHITELIST".equalsIgnoreCase(mode);
-        }
-
-        public boolean isBlacklist() {
-            return "BLACKLIST".equalsIgnoreCase(mode);
-        }
+        public boolean isWhitelist() { return "WHITELIST".equalsIgnoreCase(mode); }
+        public boolean isBlacklist() { return "BLACKLIST".equalsIgnoreCase(mode); }
     }
 
-    public record CacheConfig(
-        int maximumSize,
-        int expireAfterAccessMinutes
-    ) {}
+    public record CacheConfig(int maximumSize, int expireAfterAccessMinutes) {}
 
     public record ModerationConfig(
         Action onViolation,
@@ -82,17 +74,10 @@ public record DialectConfig(
     ) {}
 
     public record RedisConfig(
-        boolean enabled,
-        String uri,
-        String password,
-        int timeoutSeconds,
-        boolean useSsl
+        boolean enabled, String uri, String password, int timeoutSeconds, boolean useSsl
     ) {}
 
     public record ChatFormatConfig(
-        boolean enabled,
-        String template,
-        boolean preferLpc,
-        boolean preferLpcx
+        boolean enabled, String template, boolean preferLpc, boolean preferLpcx
     ) {}
 }
