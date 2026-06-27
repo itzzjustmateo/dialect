@@ -142,9 +142,6 @@ public class ConfigManager {
         String defaultModel = defaults[1];
 
         String apiKey = getString(node, "api_key", "");
-        if (apiKey.isBlank()) {
-            apiKey = getString(node, "openrouter_key", "");
-        }
 
         return new DialectConfig.AIConfig(
             getBoolean(node, "enabled", true),

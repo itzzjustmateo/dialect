@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.0.0] - 2026-06-28
+## [0.1.0-ALPHA] - 2026-06-28
 
 ### Added
 - Initial release of LazyDialect
