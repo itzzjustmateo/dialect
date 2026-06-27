@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "com.vomlabs.dialect"
-version = "1.0.0"
+version = "0.1.0-ALPHA"
 description = "AI-powered language enforcement, detection, translation, and moderation layer for Minecraft server chat."
 
 val serverDir: String = providers.gradleProperty("serverDir")
@@ -49,12 +49,37 @@ tasks {
         archiveClassifier.set("")
         archiveVersion.set(project.version.toString())
 
+        minimize()
+
         mergeServiceFiles()
         exclude("META-INF/INDEX.LIST")
         exclude("META-INF/*.SF")
         exclude("META-INF/*.DSA")
         exclude("META-INF/*.RSA")
-        exclude("module-info.class")
+        exclude("META-INF/*.MF")
+        exclude("META-INF/maven/**")
+        exclude("META-INF/native-image/**")
+        exclude("**/*.kotlin_module")
+        exclude("**/package-info.class")
+
+        exclude("com/fasterxml/jackson/core/internal/shaded/**")
+        exclude("redis/clients/jedis/timeseries/**")
+        exclude("redis/clients/jedis/search/**")
+        exclude("redis/clients/jedis/graph/**")
+        exclude("redis/clients/jedis/json/**")
+        exclude("redis/clients/jedis/bloom/**")
+        exclude("redis/clients/jedis/modules/**")
+        exclude("redis/clients/jedis/providers/**")
+        exclude("redis/clients/jedis/args/**")
+        exclude("redis/clients/jedis/exceptions/**")
+        exclude("net/kyori/adventure/bossbar/**")
+        exclude("net/kyori/adventure/dialog/**")
+        exclude("net/kyori/adventure/inventory/**")
+        exclude("net/kyori/adventure/nbt/**")
+        exclude("net/kyori/adventure/resource/**")
+        exclude("net/kyori/adventure/pointer/**")
+        exclude("net/kyori/adventure/permission/**")
+        exclude("net/kyori/adventure/identity/**")
     }
 
     build {
