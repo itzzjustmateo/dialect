@@ -2,7 +2,7 @@
 paper-api = "1.21.11-R0.1-SNAPSHOT"
 minecraft = "1.21.11"
 adventure-api = "4.17.0"
-adventure-minimessage = "4.17.0"
+adventure-minimessage = "5.2.0"
 jackson-core = "2.17.1"
 jackson-databind = "2.22.0"
 jackson-dataformat-yaml = "2.17.1"
