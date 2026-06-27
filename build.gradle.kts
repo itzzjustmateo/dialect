@@ -43,8 +43,6 @@ tasks.withType<JavaCompile> {
     options.compilerArgs.add("-XDstringConcat=inline")
 }
 
-val serverPluginsDir = layout.projectDirectory.dir("$serverDir/plugins")
-
 tasks {
     shadowJar {
         archiveBaseName.set("Dialect")
@@ -63,21 +61,13 @@ tasks {
         dependsOn(shadowJar)
     }
 
-    register<Copy>("deployPlugin") {
+    val deployPlugin = register<Copy>("deployPlugin") {
         dependsOn(shadowJar)
         group = "deployment"
         description = "Copies the shadowJar to the target server's plugins directory."
 
-        from(shadowJar.get().archiveFile)
-        into(serverPluginsDir)
-
-        doFirst {
-            logger.lifecycle("Deploying Dialect to: ${serverPluginsDir.asFile.absolutePath}")
-            serverPluginsDir.asFile.mkdirs()
-        }
-        doLast {
-            logger.lifecycle("Deployed Dialect-${project.version}.jar to ${serverPluginsDir.asFile.absolutePath}")
-        }
+        from(shadowJar.flatMap { it.archiveFile })
+        into(providers.provider { file("$serverDir/plugins") })
     }
 
     register<DefaultTask>("setupServer") {
@@ -100,11 +90,11 @@ tasks {
         }
     }
 
-    register<DefaultTask>("deployAndRun") {
+    register("deployAndRun") {
         group = "deployment"
         description = "Builds, deploys the plugin, then starts the Paper server."
 
-        dependsOn("deployPlugin")
+        dependsOn(deployPlugin)
         finalizedBy("runServer")
     }
 
