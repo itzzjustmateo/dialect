@@ -52,7 +52,7 @@ public class GeminiProvider implements AiProvider {
         if (!rateLimiter.tryAcquire()) {
             long resetTime = rateLimiter.getResetTimeMillis();
             return CompletableFuture.failedFuture(
-                new RateLimitExceededException("Rate limit exceeded. Resets in " + (resetTime / 1000) + "s", resetTime)
+                new OpenRouterClient.RateLimitExceededException("Rate limit exceeded. Resets in " + (resetTime / 1000) + "s", resetTime)
             );
         }
         return retryStrategy.executeWithRetry(() -> executeRequest(messages));

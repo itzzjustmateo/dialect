@@ -140,7 +140,7 @@ public class DialectCommand implements CommandExecutor, TabCompleter {
 
         try {
             configManager.reload();
-            openRouterClient.shutdown();
+            aiProvider.shutdown();
             plugin.getDependencyInjector().reinitializeServices();
             MessagesConfig msg = configManager.messages();
             sender.sendMessage(ColorUtil.deserializeUncached(msg.prefix() + msg.reloadSuccess()));

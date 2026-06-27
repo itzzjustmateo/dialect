@@ -12,7 +12,7 @@ ai:
   # API endpoint (leave empty for provider default)
   endpoint: ""
   # Model to use (leave empty for provider default)
-  model: ""
+  model: "openrouter/owl-alpha"
   # Model temperature (lower = more deterministic)
   temperature: 0.1
   # Request timeout in seconds
