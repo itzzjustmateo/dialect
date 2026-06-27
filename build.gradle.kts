@@ -58,7 +58,12 @@ tasks {
     }
 
     build {
+        dependsOn("clean")
         dependsOn(shadowJar)
+    }
+
+    named("classes") {
+        mustRunAfter("clean")
     }
 
     val deployPlugin = register<Copy>("deployPlugin") {
