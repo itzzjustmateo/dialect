@@ -67,7 +67,7 @@ Releases are automatically published to Modrinth when a tag is pushed. To enable
 
 1. Create a project on [Modrinth](https://modrinth.com) (if you haven't already)
 2. Generate a Modrinth API token:
-   - Go to https://modrinth.com/settings/tokens
+   - Go to https://modrinth.com/settings/pats
    - Click **New Token**
    - Give it a name (e.g., `dialect-release`)
    - Select the **Upload Versions** permission
