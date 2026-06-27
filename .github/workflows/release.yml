@@ -31,6 +31,22 @@ jobs:
         id: version
         run: echo "VERSION=${GITHUB_REF_NAME#v}" >> $GITHUB_OUTPUT
 
+      - name: VirusTotal Scan
+        if: ${{ secrets.VIRUSTOTAL_API_KEY != '' }}
+        run: |
+          RESPONSE=$(curl -s --request POST \
+            --url https://www.virustotal.com/api/v3/files \
+            --header "x-apikey: ${{ secrets.VIRUSTOTAL_API_KEY }}" \
+            --form "file=@build/libs/LazyDialect-${{ steps.version.outputs.VERSION }}.jar")
+          ANALYSIS_ID=$(echo "$RESPONSE" | jq -r '.data.id')
+          echo "VirusTotal analysis ID: $ANALYSIS_ID"
+          sleep 20
+          curl -s --request GET \
+            --url "https://www.virustotal.com/api/v3/analyses/$ANALYSIS_ID" \
+            --header "x-apikey: ${{ secrets.VIRUSTOTAL_API_KEY }}" \
+            | jq '.data.attributes.stats'
+        continue-on-error: true
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:

@@ -30,3 +30,19 @@ jobs:
         with:
           name: LazyDialect-plugin
           path: build/libs/LazyDialect-*.jar
+
+      - name: VirusTotal Scan
+        if: ${{ secrets.VIRUSTOTAL_API_KEY != '' }}
+        run: |
+          curl -s --request POST \
+            --url https://www.virustotal.com/api/v3/files \
+            --header "x-apikey: ${{ secrets.VIRUSTOTAL_API_KEY }}" \
+            --form "file=@$(ls build/libs/LazyDialect-*.jar)" \
+            --output vt_response.json
+          echo "VirusTotal scan submitted. Analysis ID: $(jq -r '.data.id' vt_response.json)"
+          sleep 15
+          curl -s --request GET \
+            --url "https://www.virustotal.com/api/v3/analyses/$(jq -r '.data.id' vt_response.json)" \
+            --header "x-apikey: ${{ secrets.VIRUSTOTAL_API_KEY }}" \
+            | jq '.data.attributes.stats'
+        continue-on-error: true
