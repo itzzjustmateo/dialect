@@ -4,7 +4,6 @@ import com.vomlabs.dialect.model.Action;
 import com.vomlabs.dialect.model.ChatMessage;
 import com.vomlabs.dialect.config.DialectConfig;
 import com.vomlabs.dialect.service.ai.AiProvider;
-import com.vomlabs.dialect.service.ai.OpenRouterClient;
 import com.vomlabs.dialect.service.ai.PromptBuilder;
 import com.vomlabs.dialect.service.cache.CacheService;
 import com.vomlabs.dialect.util.TextSanitizer;
@@ -16,20 +15,20 @@ public class ModerationService {
 
     private final DialectConfig.ModerationConfig moderationConfig;
     private final DialectConfig.LanguageConfig languageConfig;
-    private final OpenRouterClient openRouterClient;
+    private final AiProvider aiProvider;
     private final CacheService cacheService;
     private final Logger logger;
 
     public ModerationService(
         DialectConfig.ModerationConfig moderationConfig,
         DialectConfig.LanguageConfig languageConfig,
-        OpenRouterClient openRouterClient,
+        AiProvider aiProvider,
         CacheService cacheService,
         Logger logger
     ) {
         this.moderationConfig = moderationConfig;
         this.languageConfig = languageConfig;
-        this.openRouterClient = openRouterClient;
+        this.aiProvider = aiProvider;
         this.cacheService = cacheService;
         this.logger = logger;
     }
@@ -63,7 +62,7 @@ public class ModerationService {
 
         String cacheKey = "mod:" + sanitized.toLowerCase().hashCode();
 
-        return openRouterClient.analyzeMessage(
+        return aiProvider.analyzeMessage(
             PromptBuilder.createModerationPrompt(sanitized, langCode, buildRulesString()).build()
         ).thenApply(response -> {
             try {

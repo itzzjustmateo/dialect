@@ -5,7 +5,8 @@ import com.vomlabs.dialect.command.LanguageCommand;
 import com.vomlabs.dialect.config.ConfigManager;
 import com.vomlabs.dialect.listener.ChatListener;
 import com.vomlabs.dialect.listener.PlayerQuitListener;
-import com.vomlabs.dialect.service.ai.OpenRouterClient;
+import com.vomlabs.dialect.service.ai.AiProvider;
+import com.vomlabs.dialect.service.ai.AiProviderFactory;
 import com.vomlabs.dialect.service.cache.CacheService;
 import com.vomlabs.dialect.service.cache.RedisService;
 import com.vomlabs.dialect.service.detection.DetectionService;
@@ -28,7 +29,7 @@ public class DIOrchestrator {
     private final Logger logger;
     private final ConfigManager configManager;
 
-    private OpenRouterClient openRouterClient;
+    private AiProvider aiProvider;
     private DeepLClient deepLClient;
     private CacheService cacheService;
     private RedisService redisService;
@@ -60,7 +61,7 @@ public class DIOrchestrator {
         redisService.initialize();
         cacheService.setRedisService(redisService);
 
-        openRouterClient = new OpenRouterClient(configManager.config().ai(), logger);
+        aiProvider = AiProviderFactory.create(configManager.config().ai(), logger);
         deepLClient = new DeepLClient(
             configManager.config().deepl().apiKey(),
             configManager.config().deepl().useFreePlan(),
@@ -78,12 +79,12 @@ public class DIOrchestrator {
         );
 
         detectionService = new DetectionService(
-            openRouterClient, cacheService, configManager.config().languages(),
+            aiProvider, cacheService, configManager.config().languages(),
             configManager.config().ai(), logger
         );
 
         translationService = new TranslationService(
-            openRouterClient, deepLClient,
+            aiProvider, deepLClient,
             configManager.config().ai(), configManager.config().deepl(),
             configManager.config().languages(),
             configManager.messages(), logger
@@ -91,7 +92,7 @@ public class DIOrchestrator {
 
         moderationService = new ModerationService(
             configManager.config().moderation(), configManager.config().languages(),
-            openRouterClient, cacheService, logger
+            aiProvider, cacheService, logger
         );
 
         chatListener = new ChatListener(
@@ -103,7 +104,7 @@ public class DIOrchestrator {
 
         dialectCommand = new DialectCommand(
             plugin, configManager, detectionService, translationService,
-            cacheService, openRouterClient, logger
+            cacheService, aiProvider, logger
         );
 
         languageCommand = new LanguageCommand(cacheService, configManager);
@@ -114,7 +115,7 @@ public class DIOrchestrator {
     }
 
     public void reinitializeServices() {
-        openRouterClient.shutdown();
+        aiProvider.shutdown();
         deepLClient.shutdown();
         redisService.shutdown();
 
@@ -123,7 +124,7 @@ public class DIOrchestrator {
         redisService.initialize();
         cacheService.setRedisService(redisService);
 
-        openRouterClient = new OpenRouterClient(configManager.config().ai(), logger);
+        aiProvider = AiProviderFactory.create(configManager.config().ai(), logger);
         deepLClient = new DeepLClient(
             configManager.config().deepl().apiKey(),
             configManager.config().deepl().useFreePlan(),
@@ -132,12 +133,12 @@ public class DIOrchestrator {
         );
 
         detectionService = new DetectionService(
-            openRouterClient, cacheService, configManager.config().languages(),
+            aiProvider, cacheService, configManager.config().languages(),
             configManager.config().ai(), logger
         );
 
         translationService = new TranslationService(
-            openRouterClient, deepLClient,
+            aiProvider, deepLClient,
             configManager.config().ai(), configManager.config().deepl(),
             configManager.config().languages(),
             configManager.messages(), logger
@@ -145,7 +146,7 @@ public class DIOrchestrator {
 
         moderationService = new ModerationService(
             configManager.config().moderation(), configManager.config().languages(),
-            openRouterClient, cacheService, logger
+            aiProvider, cacheService, logger
         );
 
         chatListener = new ChatListener(
@@ -163,7 +164,7 @@ public class DIOrchestrator {
 
     public void shutdown() {
         logger.info("Shutting down Dialect services...");
-        if (openRouterClient != null) openRouterClient.shutdown();
+        if (aiProvider != null) aiProvider.shutdown();
         if (deepLClient != null) deepLClient.shutdown();
         if (redisService != null) redisService.shutdown();
         if (cacheService != null) cacheService.clearAll();
@@ -180,11 +181,12 @@ public class DIOrchestrator {
         }
 
         if (hasOpenRouter) {
-            logger.info("Translation provider: OpenRouter (" + configManager.config().ai().model() + ")");
+            String provider = configManager.config().ai().provider();
+            logger.info("AI provider: " + provider + " (" + configManager.config().ai().model() + ")");
         } else if (hasDeepL) {
             logger.info("Translation provider: DeepL (fallback mode)");
         } else if (aiEnabled) {
-            logger.warning("No translation provider configured. Set 'ai.openrouter_key' or 'deepl.api_key' in config.yml");
+            logger.warning("No AI provider configured. Set 'ai.api_key' or 'deepl.api_key' in config.yml");
         }
 
         if (hasRedis) {
@@ -221,7 +223,7 @@ public class DIOrchestrator {
     }
 
     public ConfigManager getConfigManager() { return configManager; }
-    public OpenRouterClient getOpenRouterClient() { return openRouterClient; }
+    public AiProvider getAiProvider() { return aiProvider; }
     public DeepLClient getDeepLClient() { return deepLClient; }
     public CacheService getCacheService() { return cacheService; }
     public RedisService getRedisService() { return redisService; }

@@ -3,7 +3,6 @@ package com.vomlabs.dialect.service.translation;
 import com.vomlabs.dialect.config.DialectConfig;
 import com.vomlabs.dialect.config.MessagesConfig;
 import com.vomlabs.dialect.service.ai.AiProvider;
-import com.vomlabs.dialect.service.ai.OpenRouterClient;
 import com.vomlabs.dialect.service.ai.PromptBuilder;
 import com.vomlabs.dialect.util.TextSanitizer;
 import java.util.concurrent.CompletableFuture;
@@ -11,7 +10,7 @@ import java.util.logging.Logger;
 
 public class TranslationService {
 
-    private final OpenRouterClient openRouterClient;
+    private final AiProvider aiProvider;
     private final DeepLClient deepLClient;
     private final DialectConfig.AIConfig aiConfig;
     private final DialectConfig.DeepLConfig deepLConfig;
@@ -20,7 +19,7 @@ public class TranslationService {
     private final Logger logger;
 
     public TranslationService(
-        OpenRouterClient openRouterClient,
+        AiProvider aiProvider,
         DeepLClient deepLClient,
         DialectConfig.AIConfig aiConfig,
         DialectConfig.DeepLConfig deepLConfig,
@@ -28,7 +27,7 @@ public class TranslationService {
         MessagesConfig messagesConfig,
         Logger logger
     ) {
-        this.openRouterClient = openRouterClient;
+        this.aiProvider = aiProvider;
         this.deepLClient = deepLClient;
         this.aiConfig = aiConfig;
         this.deepLConfig = deepLConfig;
@@ -67,7 +66,7 @@ public class TranslationService {
     }
 
     private CompletableFuture<String> translateViaOpenRouter(String text, String sourceLanguage, String targetLanguage) {
-        return openRouterClient.analyzeMessage(
+        return aiProvider.analyzeMessage(
             PromptBuilder.createTranslationPrompt(text, sourceLanguage, targetLanguage).build()
         ).thenApply(response -> {
             try {
