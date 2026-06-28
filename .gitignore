@@ -19,3 +19,11 @@ hs_err_pid*
 
 # Common working directory
 run
+
+# IDE
+.classpath
+.project
+.settings/
+*.swp
+*.swo
+*.kate-swp
