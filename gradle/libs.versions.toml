@@ -10,7 +10,7 @@ caffeine = "3.2.4"
 jedis = "7.5.2"
 shadow = "9.4.3"
 run-task = "3.0.2"
-junit-jupiter = "6.1.0"
+junit-jupiter = "6.1.1"
 mockito-core = "5.11.0"
 
 [libraries]
