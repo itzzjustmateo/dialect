@@ -11,7 +11,7 @@ jedis = "7.5.2"
 shadow = "9.4.3"
 run-task = "3.0.2"
 junit-jupiter = "6.1.0"
-mockito-core = "5.11.0"
+mockito-core = "5.23.0"
 
 [libraries]
 paper-api = { module = "io.papermc.paper:paper-api", version.ref = "paper-api" }
