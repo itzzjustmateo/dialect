@@ -89,4 +89,3 @@ class DeepLClientTest {
         assertTrue(client.isConfigured());
     }
 }
-

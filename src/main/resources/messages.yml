@@ -1,23 +1,31 @@
-# ─────────────────────────────────────────────
+# ─────────────────────────────────────────────────
 # LazyDialect Messages
-# ─────────────────────────────────────────────
-# All messages support MiniMessage formatting.
-# See: https://docs.advntr.dev/minimessage/format.html
+# ─────────────────────────────────────────────────
+# Uses MiniMessage format. See: https://docs.advntr.dev/minimessage/format.html
+#
+# Palette:
+#   Prefix:      <color:#478FC6>
+#   Text:        <color:#C2C7D3>
+#   Error Text:  <color:#D1988C>
+#   Error Icon:  <color:#CE5F4E>
 
-prefix: "<gradient:#4facfe:#00f2fe>[LazyDialect]</gradient> "
-violation_warning: "<red>Your message was not sent because it violates the server language policy.</red>"
-translation_format: "<gray>[Translated from {from}]: {message}</gray>"
-no_permission: "<red>You do not have permission to execute this command.</red>"
-reload_success: "<green>Configuration and caches successfully reloaded.</green>"
-correction_suggested: "<gold>Did you mean:</gold> <click:suggest_command:'{correction}'><hover:show_text:'<gray>Click to accept</gray>'>{correction}</hover></click>"
-api_error: "<red>An error occurred while processing your request. Please try again later.</red>"
-rate_limited: "<red>Too many requests. Please wait before sending another message.</red>"
-ai_unavailable: "<red>The AI service is unavailable. Please try again later.</red>"
+prefix: "<color:#478FC6>▸</color> <color:#C2C7D3>"
 
-# Actionbar messages (shown briefly above the hotbar)
-actionbar_translated: "<gray>Message translated to</gray> <lang:{lang}>{lang}</lang>"
-actionbar_detected: "<gray>Detected:</gray> <lang:{lang}>{lang}</lang>"
-actionbar_blocked: "<red>Message blocked</red>"
-actionbar_warned: "<gold>Language warning issued</gold>"
-actionbar_allowed: "<green>Message sent</green>"
-actionbar_processing: "<yellow>Processing message...</yellow>"
+violation_warning: "<color:#D1988C>✕ <color:#C2C7D3>Your message was not sent because it violates the server language policy.</color>"
+translation_format: "<color:#C2C7D3>[</color><color:#478FC6>Translated from {from}</color><color:#C2C7D3>]: {message}</color>"
+no_permission: "<color:#D1988C>✕ <color:#C2C7D3>You do not have permission to execute this command.</color>"
+reload_success: "<color:#C2C7D3>Configuration and caches successfully reloaded.</color>"
+correction_suggested: "<color:#C2C7D3>Did you mean?</color> <click:suggest_command:'{correction}'><hover:show_text:'<color:#C2C7D3>Click to accept</color>'><color:#478FC6>{correction}</color></hover></click>"
+api_error: "<color:#D1988C>✕ <color:#C2C7D3>An error occurred while processing your request. Please try again later.</color>"
+rate_limited: "<color:#D1988C>✕ <color:#C2C7D3>Too many requests. Please wait before sending another message.</color>"
+ai_unavailable: "<color:#D1988C>✕ <color:#C2C7D3>The AI service is unavailable. Please try again later.</color>"
+
+language_disabled: "<color:#D1988C>✕ <color:#C2C7D3>Language selection is not available on this server.</color>"
+language_set: "<color:#C2C7D3>Language set to</color> <color:#478FC6>{lang}</color>"
+
+actionbar_translated: "<color:#478FC6>⇄</color> <color:#C2C7D3>Translated</color> <color:#478FC6>{lang}</color>"
+actionbar_detected: "<color:#478FC6>◈</color> <color:#C2C7D3>Detected</color> <color:#478FC6>{lang}</color>"
+actionbar_blocked: "<color:#CE5F4E>✕</color> <color:#C2C7D3>Message blocked</color>"
+actionbar_warned: "<color:#CE5F4E>⚠</color> <color:#C2C7D3>Language warning issued</color>"
+actionbar_allowed: "<color:#478FC6>✓</color> <color:#C2C7D3>Message sent</color>"
+actionbar_processing: "<color:#478FC6>⋯</color> <color:#C2C7D3>Processing message...</color>"

@@ -2,7 +2,6 @@ package com.vomlabs.dialect.service.ai;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class RetryStrategy {

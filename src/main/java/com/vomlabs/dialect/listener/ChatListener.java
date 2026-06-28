@@ -17,13 +17,12 @@ import com.vomlabs.dialect.util.ColorUtil;
 import com.vomlabs.dialect.util.ComponentExtractor;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
-import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
@@ -155,9 +154,9 @@ public class ChatListener implements Listener {
 
                         String provider = configManager.config().ai().isConfigured() ? "AI" : "DeepL";
                         Component icon = Component.text(" \u2139")
-                            .color(NamedTextColor.AQUA)
+                            .color(TextColor.color(0x478FC6))
                             .hoverEvent(HoverEvent.showText(
-                                Component.text("This message was modified. It was translated via " + provider)
+                                ColorUtil.deserializeUncached("<color:#C2C7D3>Translated via</color> <color:#478FC6>" + provider + "</color>")
                             ));
                         translatedComponent = translatedComponent.append(icon);
 
@@ -220,8 +219,8 @@ public class ChatListener implements Listener {
         }
 
         String langCode = message.detectedLanguage().map(Language::code).orElse("unknown");
-        String staffMsg = "<gold>[Staff]</gold> <red>" + player.getName() + "</red> <gray>sent a message in</gray> <lang:" + langCode + ">" + langCode + "</lang>: "
-            + "<hover:show_text:'<gray>" + reason + "</gray>'><message_content>" + message.content() + "</message_content></hover>";
+        String staffMsg = "<color:#478FC6>◈</color> <color:#C2C7D3>" + player.getName() + "</color> <color:#C2C7D3>sent a message in</color> <color:#478FC6>" + langCode + "</color><color:#C2C7D3>:</color> "
+            + "<hover:show_text:'<color:#D1988C>" + reason + "</color>'><color:#C2C7D3>" + message.content() + "</color></hover>";
 
         Component staffComponent = ColorUtil.deserializeUncached(staffMsg);
         for (Player online : org.bukkit.Bukkit.getOnlinePlayers()) {

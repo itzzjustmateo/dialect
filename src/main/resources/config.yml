@@ -1,93 +1,74 @@
-# ─────────────────────────────────────────────
+# ─────────────────────────────────────────────────
 # LazyDialect Configuration File
-# ─────────────────────────────────────────────
+# ─────────────────────────────────────────────────
 
 ai:
-  # Whether to use AI features (detection, translation, moderation)
   enabled: true
-  # AI provider: openrouter, openai, anthropic, gemini, huggingface
+  # Supported providers: openrouter, openai, anthropic, gemini, huggingface
   provider: "openrouter"
-  # API key for the selected provider
   api_key: ""
-  # API endpoint (leave empty for provider default)
+  # Leave empty for provider default
   endpoint: ""
-  # Model to use (leave empty for provider default)
   model: "openrouter/owl-alpha"
-  # Model temperature (lower = more deterministic)
+  # Lower = more deterministic output
   temperature: 0.1
-  # Request timeout in seconds
   timeout_seconds: 5
-  # Maximum retries for failed requests
   max_retries: 3
-  # Base delay in milliseconds for exponential backoff
+  # Base delay (ms) for exponential backoff
   backoff_base_ms: 500
 
-# DeepL API configuration (fallback translation when no OpenRouter key is set)
 deepl:
-  # Your DeepL API key from https://www.deepl.com/account/summary
-  # Used as fallback when OpenRouter key is not configured
+  # Fallback translation when no AI provider key is set
   api_key: ""
-  # Whether to use the free API plan (api-free.deepl.com) or pro (api.deepl.com)
+  # true = api-free.deepl.com, false = api.deepl.com
   use_free_plan: true
-  # Request timeout in seconds
   timeout_seconds: 5
 
 languages:
-  # Options: WHITELIST (only listed allowed), BLACKLIST (listed languages blocked)
+  # WHITELIST = only listed languages allowed, BLACKLIST = listed languages blocked
   mode: "WHITELIST"
-  # List of ISO 639-1 language codes
   allowed:
     - "en"
     - "de"
-  # Server's default language
   server_default: "en"
-  # Fallback behavior when detection fails: ALLOW, DENY, WARN, TRANSLATE, SUGGEST_CORRECTION, LOG_ONLY
+  # ALLOW | DENY | WARN | TRANSLATE | SUGGEST_CORRECTION | LOG_ONLY
   fallback_behavior: "WARN"
-  # Minimum confidence threshold (0.0 to 1.0) for detection
+  # 0.0 to 1.0
   confidence_threshold: 0.75
 
 cache:
-  # Maximum number of cached entries
   maximum_size: 10000
-  # Cache expiration in minutes after last access
   expire_after_access_minutes: 30
 
 moderation:
-  # Action on violation: ALLOW, DENY, WARN, TRANSLATE, SUGGEST_CORRECTION, LOG_ONLY
+  # ALLOW | DENY | WARN | TRANSLATE | SUGGEST_CORRECTION | LOG_ONLY
   on_violation: "TRANSLATE"
-  # Whether to validate slang usage
   enable_slang_validation: true
-  # Cooldown between messages in seconds
   cooldown_seconds: 2
-  # Whether to notify staff when violations are detected
   notify_staff: true
 
-# Redis / Dragonfly configuration for distributed caching (optional)
 redis:
-  # Set to true to enable Redis-backed caching across multiple servers
+  # Distributed caching (optional, requires Redis or Dragonfly)
   enabled: false
-  # Redis connection URI (supports redis://, rediss:// for TLS)
+  # Supports redis:// and rediss:// (TLS)
   uri: "redis://localhost:6379"
-  # Password (leave empty if none)
   password: ""
-  # Connection timeout in seconds
   timeout_seconds: 2
-  # Whether to use SSL (rediss://)
   use_ssl: false
 
+language_selection:
+  # Enable the language selection GUI for players (/language)
+  # WIP — disabled by default
+  enabled: false
+  # GUI title (MiniMessage format)
+  gui_title: "<color:#478FC6>Select Your Language</color>"
 
-# Chat format configuration
 chat_format:
   enabled: true
   template: "<%luckperms_prefix%><player_name><%luckperms_suffix%><gray>:</gray> %message%"
-  # Whether to prefer LPC formatting if the plugin is present
   prefer_lpc: true
-  # Whether to prefer LPCX formatting if the plugin is present
   prefer_lpcx: true
 
-# Sound and particle effects
 effects:
-  # Whether to play sound effects for various events (detection, translation, etc.)
   sounds: true
-  # Whether to show particle effects for various events
   particles: true

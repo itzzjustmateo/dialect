@@ -41,15 +41,3 @@ permissions:
   lazydialect.command.language:
     description: Allows using /language command
     default: true
-
-commands:
-  lazydialect:
-    description: Main LazyDialect command
-    usage: /lazydialect <help|reload|status|detect|translate|cache>
-    permission: lazydialect.admin.*
-    aliases: [ld]
-  language:
-    description: Set your preferred language
-    usage: /language [code]
-    permission: lazydialect.command.language
-    aliases: [lang]

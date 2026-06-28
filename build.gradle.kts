@@ -2,6 +2,8 @@ plugins {
     id("java-library")
     alias(libs.plugins.run.paper)
     alias(libs.plugins.shadow)
+    id("com.diffplug.spotless") version "8.7.0"
+    pmd
 }
 
 group = "com.vomlabs.dialect"
@@ -39,6 +41,28 @@ dependencies {
 
 java {
     toolchain.languageVersion = JavaLanguageVersion.of(21)
+}
+
+spotless {
+    java {
+        target("src/*/java/**/*.java")
+        endWithNewline()
+        trimTrailingWhitespace()
+        indentWithSpaces(4)
+        removeUnusedImports()
+        toggleOffOn()
+    }
+}
+
+pmd {
+    ruleSetConfig = rootProject.resources.text.fromFile("config/pmd/ruleset.xml")
+    rulesMinimumPriority = 5
+    isConsoleOutput = true
+    isIgnoreFailures = false
+}
+
+tasks.named("pmdTest") {
+    enabled = false
 }
 
 tasks.withType<JavaCompile> {

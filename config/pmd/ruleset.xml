@@ -1,0 +1,137 @@
+<?xml version="1.0"?>
+<ruleset name="LazyDialect Rules"
+    xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 https://pmd.sourceforge.io/ruleset_2_0_0.xsd">
+
+    <description>LazyDialect PMD ruleset</description>
+
+    <rule ref="category/java/bestpractices.xml">
+        <exclude name="GuardLogStatement"/>
+        <exclude name="JUnitTestContainsTooManyAsserts"/>
+        <exclude name="JUnitAssertionsShouldIncludeMessage"/>
+        <exclude name="AvoidPrintStackTrace"/>
+        <exclude name="SystemPrintln"/>
+        <exclude name="UseVarargs"/>
+        <exclude name="AccessorMethodGeneration"/>
+        <exclude name="AvoidReassigningLoopVariable"/>
+        <exclude name="PrimitiveWrapperInstantiation"/>
+        <exclude name="UnusedPrivateMethod"/>
+        <exclude name="LiteralsFirstInComparisons"/>
+        <exclude name="LinguisticNaming"/>
+        <exclude name="UseTryWithResources"/>
+        <exclude name="SwitchStmtsShouldHaveDefault"/>
+        <exclude name="UnusedFormalParameter"/>
+        <exclude name="ForLoopVariableCount"/>
+        <exclude name="JUnitTestContainsTooManyAsserts"/>
+        <exclude name="JUnitAssertionsShouldIncludeMessage"/>
+        <exclude name="UnusedPrivateField"/>
+        <exclude name="UnusedLocalVariable"/>
+        <exclude name="UnusedAssignment"/>
+    </rule>
+
+    <rule ref="category/java/codestyle.xml">
+        <exclude name="AtLeastOneConstructor"/>
+        <exclude name="ShortVariable"/>
+        <exclude name="LongVariable"/>
+        <exclude name="ShortClassName"/>
+        <exclude name="ShortMethodName"/>
+        <exclude name="OnlyOneReturn"/>
+        <exclude name="LocalVariableCouldBeFinal"/>
+        <exclude name="MethodArgumentCouldBeFinal"/>
+        <exclude name="DefaultPackage"/>
+        <exclude name="CommentDefaultAccessModifier"/>
+        <exclude name="CallSuperInConstructor"/>
+        <exclude name="ControlStatementBraces"/>
+        <exclude name="EmptyMethodInAbstractClassShouldBeAbstract"/>
+        <exclude name="FieldDeclarationsShouldBeAtStartOfClass"/>
+        <exclude name="PremitiveWrapperInstantiation"/>
+        <exclude name="UnnecessaryAnnotationValueElement"/>
+        <exclude name="UseExplicitTypes"/>
+        <exclude name="TooManyStaticImports"/>
+        <exclude name="UnnecessaryConstructor"/>
+        <exclude name="AvoidFinalLocalVariable"/>
+        <exclude name="UseUnderscoresInNumericLiterals"/>
+        <exclude name="FieldNamingConventions"/>
+        <exclude name="FormalParameterNamingConventions"/>
+        <exclude name="LocalVariableNamingConventions"/>
+        <exclude name="MethodNamingConventions"/>
+        <exclude name="PropertyNamingConventions"/>
+        <exclude name="VariableNamingConventions"/>
+        <exclude name="UnnecessaryCast"/>
+        <exclude name="TooManyFloatingPointLiterals"/>
+        <exclude name="UnnecessaryLocalBeforeReturn"/>
+        <exclude name="ForLoopShouldBeWhileLoop"/>
+        <exclude name="ExtendsObject"/>
+        <exclude name="AvoidProtectedMethodInFinalClassNotExtending"/>
+        <exclude name="LinguisticNaming"/>
+        <exclude name="LambdaCanBeMethodReference"/>
+        <exclude name="OnlyOneReturn"/>
+        <exclude name="LocalVariableCouldBeFinal"/>
+        <exclude name="MethodArgumentCouldBeFinal"/>
+        <exclude name="UselessParentheses"/>
+    </rule>
+
+    <rule ref="category/java/errorprone.xml">
+        <exclude name="MissingSerialVersionUID"/>
+        <exclude name="DataflowAnomalyAnalysis"/>
+        <exclude name="NullAssignment"/>
+        <exclude name="AvoidLiteralsInIfCondition"/>
+        <exclude name="BeanMembersShouldSerialize"/>
+        <exclude name="NonSerializableClass"/>
+        <exclude name="UseLocaleWithCaseConversions"/>
+        <exclude name="MissingStaticMethodInNonInstantiatableClass"/>
+        <exclude name="AvoidFieldNameMatchingMethodName"/>
+        <exclude name="AvoidDuplicateLiterals"/>
+        <exclude name="InsufficientStringBufferDeclaration"/>
+        <exclude name="ConsecutiveLiteralAppends"/>
+        <exclude name="AppendCharacterWithChar"/>
+        <exclude name="UseCorrectExceptionLogging"/>
+        <exclude name="CloseResource"/>
+        <exclude name="DoNotTerminateVM"/>
+        <exclude name="AvoidCatchingGenericException"/>
+        <exclude name="AvoidCatchingThrowable"/>
+        <exclude name="AvoidThrowingRawExceptionTypes"/>
+        <exclude name="AvoidAccessibilityAlteration"/>
+        <exclude name="AvoidInstanceofChecksInCatchClause"/>
+        <exclude name="LoggerIsNotStaticFinal"/>
+        <exclude name="DoNotHardCodeSDCard"/>
+        <exclude name="MoreThanOneLogger"/>
+        <exclude name="SignatureDeclareThrowsException"/>
+        <exclude name="DontUseFloatTypeForLoopIndices"/>
+        <exclude name="UseProperClassLoader"/>
+        <exclude name="AvoidCallingFinalize"/>
+        <exclude name="EmptyFinalizer"/>
+        <exclude name="FinalizeDoesNotCallSuperFinalize"/>
+        <exclude name="FinalizeOnlyCallsSuperFinalize"/>
+        <exclude name="SingleMethodSingleton"/>
+        <exclude name="UnnecessaryCaseChange"/>
+        <exclude name="CheckSkipResult"/>
+        <exclude name="AvoidBranchingStatementAsLastInLoop"/>
+        <exclude name="CloneMethodMustImplementCloneable"/>
+        <exclude name="CloneMethodReturnTypeMustMatchClassName"/>
+        <exclude name="CloneThrowsCloneNotSupportedException"/>
+        <exclude name="MissingBreakInSwitch"/>
+        <exclude name="IdenticalConditionalBranches"/>
+    </rule>
+
+    <rule ref="category/java/multithreading.xml">
+        <exclude name="UseConcurrentHashMap"/>
+        <exclude name="AvoidSynchronizedStatement"/>
+        <exclude name="AvoidUsingVolatile"/>
+        <exclude name="DoNotUseThreads"/>
+        <exclude name="UnsynchronizedStaticFormatter"/>
+    </rule>
+
+    <rule ref="category/java/performance.xml">
+        <exclude name="RedundantFieldInitializer"/>
+        <exclude name="ConsecutiveAppendsShouldReuse"/>
+        <exclude name="InsufficientStringBufferDeclaration"/>
+        <exclude name="UseStringBufferForStringAppends"/>
+        <exclude name="AvoidInstantiatingObjectsInLoops"/>
+        <exclude name="SimplifyStartsWith"/>
+        <exclude name="UseArrayListInsteadOfVector"/>
+        <exclude name="AddEmptyString"/>
+        <exclude name="TooFewBranchesForSwitch"/>
+    </rule>
+</ruleset>

@@ -13,35 +13,22 @@ public record DialectConfig(
     ModerationConfig moderation,
     RedisConfig redis,
     ChatFormatConfig chatFormat,
-    EffectsConfig effects
+    EffectsConfig effects,
+    LanguageSelectionConfig languageSelection
 ) {
     public DialectConfig {
-        if (ai == null) {
-            ai = new AIConfig(true, "openrouter", "", "", "", 0.1, 5, 3, 500);
-        }
-        if (deepl == null) {
-            deepl = new DeepLConfig("", true, 5);
-        }
-        if (languages == null) {
-            languages = new LanguageConfig(
-                "WHITELIST", List.of("en", "de"), "en", Action.WARN, 0.75);
-        }
-        if (cache == null) {
-            cache = new CacheConfig(10000, 30);
-        }
-        if (moderation == null) {
-            moderation = new ModerationConfig(Action.TRANSLATE, true, 2, true);
-        }
-        if (redis == null) {
-            redis = new RedisConfig(false, "redis://localhost:6379", "", 2, false);
-        }
-        if (chatFormat == null) {
-            chatFormat = new ChatFormatConfig(
-                true, "<%luckperms_prefix%><player_name><gray>:</gray> %message%", true, true);
-        }
-        if (effects == null) {
-            effects = new EffectsConfig(true, true);
-        }
+        if (ai == null) ai = new AIConfig(true, "openrouter", "", "", "", 0.1, 5, 3, 500);
+        if (deepl == null) deepl = new DeepLConfig("", true, 5);
+        if (languages == null) languages = new LanguageConfig(
+            "WHITELIST", List.of("en", "de"), "en", Action.WARN, 0.75);
+        if (cache == null) cache = new CacheConfig(10000, 30);
+        if (moderation == null) moderation = new ModerationConfig(Action.TRANSLATE, true, 2, true);
+        if (redis == null) redis = new RedisConfig(false, "redis://localhost:6379", "", 2, false);
+        if (chatFormat == null) chatFormat = new ChatFormatConfig(
+            true, "<%luckperms_prefix%><player_name><gray>:</gray> %message%", true, true);
+        if (effects == null) effects = new EffectsConfig(true, true);
+        if (languageSelection == null) languageSelection = new LanguageSelectionConfig(false,
+            "<color:#478FC6>Select Your Language</color>");
     }
 
     public record AIConfig(
@@ -104,5 +91,10 @@ public record DialectConfig(
 
     public record EffectsConfig(
         boolean sounds, boolean particles
+    ) {}
+
+    public record LanguageSelectionConfig(
+        boolean enabled,
+        String guiTitle
     ) {}
 }

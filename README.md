@@ -34,6 +34,7 @@ AI-powered language enforcement, detection, translation, and moderation layer fo
 - **Chat Formatting** — Integrates with PlaceholderAPI, LuckPerms, LPC, LPCX, Vault, WorldGuard, and Geyser
 - **Actionbar & Effects** — Visual and audio feedback for players
 - **Auto-Updater** — `/lazydialect utils papermc update` downloads latest Paper build
+- **Language Selection** — Per-player language choice via GUI (`/language`) *[WIP — disabled by default]*
 
 ## Installation
 
@@ -54,7 +55,7 @@ AI-powered language enforcement, detection, translation, and moderation layer fo
 | `/lazydialect translate <lang> <text>` | `lazydialect.admin.translate` | Translate text |
 | `/lazydialect cache clear` | `lazydialect.admin.cache` | Clear cached data |
 | `/lazydialect utils papermc update` | `lazydialect.admin` | Download latest Paper build |
-| `/language [code]` | `lazydialect.command.language` | Set preferred language |
+| `/language` | `lazydialect.command.language` | Open language selection GUI (if enabled) |
 
 ## Configuration
 

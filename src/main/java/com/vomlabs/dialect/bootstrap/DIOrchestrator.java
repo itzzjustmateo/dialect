@@ -3,6 +3,7 @@ package com.vomlabs.dialect.bootstrap;
 import com.vomlabs.dialect.command.LazyDialectCommand;
 import com.vomlabs.dialect.command.LanguageCommand;
 import com.vomlabs.dialect.config.ConfigManager;
+import com.vomlabs.dialect.gui.LanguageGUI;
 import com.vomlabs.dialect.listener.ChatListener;
 import com.vomlabs.dialect.listener.PlayerQuitListener;
 import com.vomlabs.dialect.service.ai.AiProvider;
@@ -25,8 +26,10 @@ import com.vomlabs.dialect.service.translation.DeepLClient;
 import com.vomlabs.dialect.service.translation.TranslationService;
 import com.vomlabs.dialect.service.update.UpdateChecker;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandMap;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.PluginManager;
+import java.lang.reflect.Constructor;
 
 import java.util.logging.Logger;
 
@@ -58,6 +61,7 @@ public class DIOrchestrator {
     private PlayerQuitListener playerQuitListener;
     private LazyDialectCommand lazyDialectCommand;
     private LanguageCommand languageCommand;
+    private LanguageGUI languageGUI;
 
     public DIOrchestrator(LazyDialectPlugin plugin) {
         this.plugin = plugin;
@@ -126,13 +130,17 @@ public class DIOrchestrator {
 
         playerQuitListener = new PlayerQuitListener(cacheService);
 
+        languageGUI = new LanguageGUI(
+            cacheService, configManager, soundService, particleService
+        );
+
         lazyDialectCommand = new LazyDialectCommand(
             plugin, configManager, detectionService, translationService,
             cacheService, aiProvider, soundService, particleService, logger
         );
 
         languageCommand = new LanguageCommand(
-            cacheService, configManager, soundService, particleService, logger
+            configManager, languageGUI, logger
         );
 
         logProviderStatus();
@@ -255,6 +263,7 @@ public class DIOrchestrator {
         PluginManager pm = Bukkit.getPluginManager();
         pm.registerEvents(chatListener, plugin);
         pm.registerEvents(playerQuitListener, plugin);
+        pm.registerEvents(languageGUI, plugin);
         logger.info("Registered event listeners.");
     }
 
@@ -265,8 +274,10 @@ public class DIOrchestrator {
     }
 
     private void registerCommand(String name, Object executor) {
-        PluginCommand cmd = plugin.getCommand(name);
-        if (cmd != null) {
+        try {
+            Constructor<PluginCommand> constructor = PluginCommand.class.getDeclaredConstructor(String.class, org.bukkit.plugin.Plugin.class);
+            constructor.setAccessible(true);
+            PluginCommand cmd = constructor.newInstance(name, plugin);
             if (executor instanceof LazyDialectCommand dc) {
                 cmd.setExecutor(dc);
                 cmd.setTabCompleter(dc);
@@ -274,8 +285,10 @@ public class DIOrchestrator {
                 cmd.setExecutor(lc);
                 cmd.setTabCompleter(lc);
             }
-        } else {
-            logger.warning("Command '" + name + "' is not defined in plugin.yml");
+            CommandMap commandMap = Bukkit.getCommandMap();
+            commandMap.register(plugin.getName(), cmd);
+        } catch (Exception e) {
+            logger.severe("Failed to register command '" + name + "': " + e.getMessage());
         }
     }
 

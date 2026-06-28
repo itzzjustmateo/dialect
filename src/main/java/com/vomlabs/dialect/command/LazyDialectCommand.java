@@ -13,9 +13,6 @@ import com.vomlabs.dialect.service.translation.TranslationService;
 import com.vomlabs.dialect.model.ChatMessage;
 import com.vomlabs.dialect.util.ColorUtil;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.event.ClickEvent;
-import net.kyori.adventure.text.event.HoverEvent;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -28,12 +25,10 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
 
 public class LazyDialectCommand implements CommandExecutor, TabCompleter {
@@ -106,43 +101,43 @@ public class LazyDialectCommand implements CommandExecutor, TabCompleter {
         Component prefix = ColorUtil.deserializeUncached(msg.prefix());
 
         sender.sendMessage(prefix.append(
-            ColorUtil.deserializeUncached("<gold>===== LazyDialect Commands =====</gold>")));
+            ColorUtil.deserializeUncached("<color:#478FC6>─── Commands ───</color>")));
 
         if (sender.hasPermission(PERMISSION_RELOAD)) {
             sender.sendMessage(prefix.append(ColorUtil.deserializeUncached(
                 "<click:run_command:'/lazydialect reload'>"
-                + "<hover:show_text:'<gray>Click to reload</gray>'><gold>/lazydialect reload</gold></hover></click>"
-                + " <dark_gray>-</dark_gray> <gray>Reload configuration and caches</gray>"
+                + "<hover:show_text:'<color:#C2C7D3>Click to reload</color>'><color:#478FC6>/lazydialect reload</color></hover></click>"
+                + " <color:#C2C7D3>- Reload configuration and caches</color>"
             )));
         }
 
         if (sender.hasPermission(PERMISSION_STATUS)) {
             sender.sendMessage(prefix.append(ColorUtil.deserializeUncached(
                 "<click:run_command:'/lazydialect status'>"
-                + "<hover:show_text:'<gray>Click to view status</gray>'><gold>/lazydialect status</gold></hover></click>"
-                + " <dark_gray>-</dark_gray> <gray>View plugin status and metrics</gray>"
+                + "<hover:show_text:'<color:#C2C7D3>Click to view status</color>'><color:#478FC6>/lazydialect status</color></hover></click>"
+                + " <color:#C2C7D3>- View plugin status and metrics</color>"
             )));
         }
 
         if (sender.hasPermission(PERMISSION_DETECT)) {
             sender.sendMessage(prefix.append(ColorUtil.deserializeUncached(
-                "<gold>/lazydialect detect <text></gold>"
-                + " <dark_gray>-</dark_gray> <gray>Detect language of text</gray>"
+                "<color:#478FC6>/lazydialect detect <text></color>"
+                + " <color:#C2C7D3>- Detect language of text</color>"
             )));
         }
 
         if (sender.hasPermission(PERMISSION_TRANSLATE)) {
             sender.sendMessage(prefix.append(ColorUtil.deserializeUncached(
-                "<gold>/lazydialect translate <lang> <text></gold>"
-                + " <dark_gray>-</dark_gray> <gray>Translate text to target language</gray>"
+                "<color:#478FC6>/lazydialect translate <lang> <text></color>"
+                + " <color:#C2C7D3>- Translate text to target language</color>"
             )));
         }
 
         if (sender.hasPermission(PERMISSION_CACHE)) {
             sender.sendMessage(prefix.append(ColorUtil.deserializeUncached(
                 "<click:run_command:'/lazydialect cache clear'>"
-                + "<hover:show_text:'<gray>Click to clear cache</gray>'><gold>/lazydialect cache clear</gold></hover></click>"
-                + " <dark_gray>-</dark_gray> <gray>Clear cached data</gray>"
+                + "<hover:show_text:'<color:#C2C7D3>Click to clear cache</color>'><color:#478FC6>/lazydialect cache clear</color></hover></click>"
+                + " <color:#C2C7D3>- Clear cached data</color>"
             )));
         }
     }
@@ -167,7 +162,7 @@ public class LazyDialectCommand implements CommandExecutor, TabCompleter {
             logger.severe("Reload failed: " + e.getMessage());
             sender.sendMessage(ColorUtil.deserializeUncached(
                 configManager.messages().prefix()
-                + "<red>Reload failed: " + e.getMessage() + "</red>"
+                + "<color:#D1988C>✕ <color:#C2C7D3>Reload failed: " + e.getMessage() + "</color>"
             ));
         }
     }
@@ -182,52 +177,52 @@ public class LazyDialectCommand implements CommandExecutor, TabCompleter {
         String prefix = configManager.messages().prefix();
 
         sender.sendMessage(ColorUtil.deserializeUncached(
-            prefix + "<gold>===== LazyDialect Status =====</gold>"));
+            prefix + "<color:#478FC6>─── Status ───</color>"));
 
         boolean aiEnabled = config.ai().enabled();
         boolean apiConfigured = config.ai().isConfigured();
         sender.sendMessage(ColorUtil.deserializeUncached(
-            prefix + "<gray>AI:</gray> "
-            + (aiEnabled ? "<green>Enabled</green>" : "<red>Disabled</red>")
+            prefix + "<color:#C2C7D3>AI:</color> "
+            + (aiEnabled ? "<color:#C2C7D3>Enabled</color>" : "<color:#D1988C>Disabled</color>")
         ));
         sender.sendMessage(ColorUtil.deserializeUncached(
-            prefix + "<gray>AI Provider:</gray> "
-            + (apiConfigured ? "<green>Connected</green>" : "<red>Not Configured</red>")
+            prefix + "<color:#C2C7D3>AI Provider:</color> "
+            + (apiConfigured ? "<color:#C2C7D3>Connected</color>" : "<color:#D1988C>Not Configured</color>")
         ));
         if (apiConfigured) {
             sender.sendMessage(ColorUtil.deserializeUncached(
-                prefix + "<gray>Model:</gray> <white>" + config.ai().model() + "</white>"
+                prefix + "<color:#C2C7D3>Model:</color> <color:#C2C7D3>" + config.ai().model() + "</color>"
             ));
         }
 
         sender.sendMessage(ColorUtil.deserializeUncached(
-            prefix + "<gray>Language Mode:</gray> <white>" + config.languages().mode() + "</white>"
+            prefix + "<color:#C2C7D3>Language Mode:</color> <color:#C2C7D3>" + config.languages().mode() + "</color>"
         ));
         sender.sendMessage(ColorUtil.deserializeUncached(
-            prefix + "<gray>Allowed Languages:</gray> <white>"
-            + String.join(", ", config.languages().allowed()) + "</white>"
+            prefix + "<color:#C2C7D3>Allowed Languages:</color> <color:#C2C7D3>"
+            + String.join("<color:#C2C7D3>, </color>", config.languages().allowed()) + "</color>"
         ));
         sender.sendMessage(ColorUtil.deserializeUncached(
-            prefix + "<gray>Default Language:</gray> <white>"
-            + config.languages().serverDefault() + "</white>"
+            prefix + "<color:#C2C7D3>Default Language:</color> <color:#C2C7D3>"
+            + config.languages().serverDefault() + "</color>"
         ));
         sender.sendMessage(ColorUtil.deserializeUncached(
-            prefix + "<gray>Violation Action:</gray> <white>"
-            + config.moderation().onViolation().name() + "</white>"
+            prefix + "<color:#C2C7D3>Violation Action:</color> <color:#C2C7D3>"
+            + config.moderation().onViolation().name() + "</color>"
         ));
 
         sender.sendMessage(ColorUtil.deserializeUncached(
-            prefix + "<gray>User Cache:</gray> <white>"
-            + cacheService.userLanguageCacheSize() + " entries</white>"
+            prefix + "<color:#C2C7D3>User Cache:</color> <color:#C2C7D3>"
+            + cacheService.userLanguageCacheSize() + " entries</color>"
         ));
         sender.sendMessage(ColorUtil.deserializeUncached(
-            prefix + "<gray>Analysis Cache:</gray> <white>"
-            + cacheService.analysisCacheSize() + " entries</white>"
+            prefix + "<color:#C2C7D3>Analysis Cache:</color> <color:#C2C7D3>"
+            + cacheService.analysisCacheSize() + " entries</color>"
         ));
 
         int remaining = aiProvider.getRateLimiter().getRemainingRequests();
         sender.sendMessage(ColorUtil.deserializeUncached(
-            prefix + "<gray>Rate Limit Remaining:</gray> <white>" + remaining + " requests</white>"
+            prefix + "<color:#C2C7D3>Rate Limit Remaining:</color> <color:#C2C7D3>" + remaining + " requests</color>"
         ));
     }
 
@@ -239,7 +234,7 @@ public class LazyDialectCommand implements CommandExecutor, TabCompleter {
 
         if (args.length < 2) {
             sender.sendMessage(ColorUtil.deserializeUncached(
-                configManager.messages().prefix() + "<red>Usage: /lazydialect detect <text></red>"
+                configManager.messages().prefix() + "<color:#D1988C>✕ <color:#C2C7D3>Usage:</color> <color:#478FC6>/lazydialect detect <text></color></color>"
             ));
             return;
         }
@@ -250,7 +245,7 @@ public class LazyDialectCommand implements CommandExecutor, TabCompleter {
         Player targetPlayer = sender instanceof Player ? (Player) sender : null;
         if (targetPlayer == null) {
             sender.sendMessage(ColorUtil.deserializeUncached(
-                prefix + "<red>This command must be used as a player.</red>"));
+                prefix + "<color:#D1988C>✕ <color:#C2C7D3>This command must be used as a player.</color>"));
             return;
         }
 
@@ -262,24 +257,24 @@ public class LazyDialectCommand implements CommandExecutor, TabCompleter {
         detectionService.detect(msg).thenAccept(result -> {
             result.detectedLanguage().ifPresentOrElse(lang -> {
                 sender.sendMessage(ColorUtil.deserializeUncached(
-                    prefix + "<gray>Detected Language:</gray> <white>"
-                    + lang.code() + " (" + lang.displayName() + ")</white>"
+                    prefix + "<color:#C2C7D3>Detected Language:</color> <color:#C2C7D3>"
+                    + lang.code() + " (" + lang.displayName() + ")</color>"
                 ));
                 sender.sendMessage(ColorUtil.deserializeUncached(
-                    prefix + "<gray>Confidence:</gray> <white>"
-                    + String.format("%.2f", result.confidence()) + "</white>"
+                    prefix + "<color:#C2C7D3>Confidence:</color> <color:#C2C7D3>"
+                    + String.format("%.2f", result.confidence()) + "</color>"
                 ));
                 sender.sendMessage(ColorUtil.deserializeUncached(
-                    prefix + "<gray>Contains Slang:</gray> <white>" + result.containsSlang() + "</white>"
+                    prefix + "<color:#C2C7D3>Contains Slang:</color> <color:#C2C7D3>" + result.containsSlang() + "</color>"
                 ));
                 sender.sendMessage(ColorUtil.deserializeUncached(
-                    prefix + "<gray>Valid Slang:</gray> <white>" + result.isValidSlangInContext() + "</white>"
+                    prefix + "<color:#C2C7D3>Valid Slang:</color> <color:#C2C7D3>" + result.isValidSlangInContext() + "</color>"
                 ));
                 sender.sendMessage(ColorUtil.deserializeUncached(
-                    prefix + "<gray>Translation:</gray> <white>" + result.normalizedTranslation().orElse("N/A") + "</white>"
+                    prefix + "<color:#C2C7D3>Translation:</color> <color:#C2C7D3>" + result.normalizedTranslation().orElse("N/A") + "</color>"
                 ));
                 sender.sendMessage(ColorUtil.deserializeUncached(
-                    prefix + "<gray>Allowed:</gray> " + (detectionService.isLanguageAllowed(lang.code()) ? "<green>Yes</green>" : "<red>No</red>")
+                    prefix + "<color:#C2C7D3>Allowed:</color> " + (detectionService.isLanguageAllowed(lang.code()) ? "<color:#C2C7D3>Yes</color>" : "<color:#D1988C>No</color>")
                 ));
                 targetPlayer.sendActionBar(ColorUtil.deserializeUncached(
                     configManager.messages().actionbarDetected().replace("{lang}", lang.code())
@@ -288,13 +283,13 @@ public class LazyDialectCommand implements CommandExecutor, TabCompleter {
                 particleService.spawnDetectionParticles(targetPlayer);
             }, () -> {
                 sender.sendMessage(ColorUtil.deserializeUncached(
-                    prefix + "<red>Could not detect language for the provided text.</red>"
+                    prefix + "<color:#D1988C>✕ <color:#C2C7D3>Could not detect language for the provided text.</color>"
                 ));
             });
         }).exceptionally(throwable -> {
             logger.warning("Detection command failed: " + throwable.getMessage());
             sender.sendMessage(ColorUtil.deserializeUncached(
-                prefix + "<red>Detection failed: " + throwable.getMessage() + "</red>"
+                prefix + "<color:#D1988C>✕ <color:#C2C7D3>Detection failed: " + throwable.getMessage() + "</color>"
             ));
             return null;
         });
@@ -308,7 +303,7 @@ public class LazyDialectCommand implements CommandExecutor, TabCompleter {
 
         if (args.length < 3) {
             sender.sendMessage(ColorUtil.deserializeUncached(
-                configManager.messages().prefix() + "<red>Usage: /lazydialect translate <lang> <text></red>"
+                configManager.messages().prefix() + "<color:#D1988C>✕ <color:#C2C7D3>Usage:</color> <color:#478FC6>/lazydialect translate <lang> <text></color></color>"
             ));
             return;
         }
@@ -317,14 +312,14 @@ public class LazyDialectCommand implements CommandExecutor, TabCompleter {
         String text = String.join(" ", java.util.Arrays.copyOfRange(args, 2, args.length));
         String prefix = configManager.messages().prefix();
 
-        sender.sendMessage(ColorUtil.deserializeUncached(prefix + "<yellow>Translating...</yellow>"));
+        sender.sendMessage(ColorUtil.deserializeUncached(prefix + "<color:#478FC6>⋯</color> <color:#C2C7D3>Translating...</color>"));
 
         translationService.translate(text, "auto", targetLanguage).thenAccept(translated -> {
             sender.sendMessage(ColorUtil.deserializeUncached(
-                prefix + "<gray>Original:</gray> <white>" + text + "</white>"
+                prefix + "<color:#C2C7D3>Original:</color> <color:#C2C7D3>" + text + "</color>"
             ));
             sender.sendMessage(ColorUtil.deserializeUncached(
-                prefix + "<gray>Translated (" + targetLanguage + "):</gray> <white>" + translated + "</white>"
+                prefix + "<color:#C2C7D3>Translated (" + targetLanguage + "):</color> <color:#C2C7D3>" + translated + "</color>"
             ));
             if (sender instanceof Player p) {
                 soundService.playTranslationComplete(p);
@@ -333,7 +328,7 @@ public class LazyDialectCommand implements CommandExecutor, TabCompleter {
         }).exceptionally(throwable -> {
             logger.warning("Translate command failed: " + throwable.getMessage());
             sender.sendMessage(ColorUtil.deserializeUncached(
-                prefix + "<red>Translation failed: " + throwable.getMessage() + "</red>"
+                prefix + "<color:#D1988C>✕ <color:#C2C7D3>Translation failed: " + throwable.getMessage() + "</color>"
             ));
             return null;
         });
@@ -347,7 +342,7 @@ public class LazyDialectCommand implements CommandExecutor, TabCompleter {
 
         if (args.length < 2 || !args[1].equalsIgnoreCase("clear")) {
             sender.sendMessage(ColorUtil.deserializeUncached(
-                configManager.messages().prefix() + "<red>Usage: /lazydialect cache clear</red>"
+                configManager.messages().prefix() + "<color:#D1988C>✕ <color:#C2C7D3>Usage:</color> <color:#478FC6>/lazydialect cache clear</color></color>"
             ));
             return;
         }
@@ -358,7 +353,7 @@ public class LazyDialectCommand implements CommandExecutor, TabCompleter {
 
         String prefix = configManager.messages().prefix();
         sender.sendMessage(ColorUtil.deserializeUncached(
-            prefix + "<green>Cache cleared.</green> <gray>Removed " + userBefore + " user entries and " + analysisBefore + " analysis entries.</gray>"
+            prefix + "<color:#C2C7D3>Cache cleared.</color> <color:#C2C7D3>Removed " + userBefore + " user entries and " + analysisBefore + " analysis entries.</color>"
         ));
         logger.info("Cache cleared by " + sender.getName() + " (" + userBefore + " user, " + analysisBefore + " analysis entries)");
         if (sender instanceof Player p) {
@@ -369,7 +364,7 @@ public class LazyDialectCommand implements CommandExecutor, TabCompleter {
     private void handleUtils(CommandSender sender, String[] args) {
         if (args.length < 2) {
             sender.sendMessage(ColorUtil.deserializeUncached(
-                configManager.messages().prefix() + "<red>Usage: /lazydialect utils <papermc|...></red>"
+                configManager.messages().prefix() + "<color:#D1988C>✕ <color:#C2C7D3>Usage:</color> <color:#478FC6>/lazydialect utils <papermc></color></color>"
             ));
             return;
         }
@@ -377,7 +372,7 @@ public class LazyDialectCommand implements CommandExecutor, TabCompleter {
         switch (args[1].toLowerCase()) {
             case "papermc" -> handlePaperMc(sender, args);
             default -> sender.sendMessage(ColorUtil.deserializeUncached(
-                configManager.messages().prefix() + "<red>Unknown utility. Use: papermc</red>"
+                configManager.messages().prefix() + "<color:#D1988C>✕ <color:#C2C7D3>Unknown utility. Use:</color> <color:#478FC6>papermc</color>"
             ));
         }
     }
@@ -385,7 +380,7 @@ public class LazyDialectCommand implements CommandExecutor, TabCompleter {
     private void handlePaperMc(CommandSender sender, String[] args) {
         if (args.length < 3 || !args[2].equalsIgnoreCase("update")) {
             sender.sendMessage(ColorUtil.deserializeUncached(
-                configManager.messages().prefix() + "<red>Usage: /lazydialect utils papermc update</red>"
+                configManager.messages().prefix() + "<color:#D1988C>✕ <color:#C2C7D3>Usage:</color> <color:#478FC6>/lazydialect utils papermc update</color></color>"
             ));
             return;
         }
@@ -396,7 +391,7 @@ public class LazyDialectCommand implements CommandExecutor, TabCompleter {
         }
 
         String prefix = configManager.messages().prefix();
-        sender.sendMessage(ColorUtil.deserializeUncached(prefix + "<yellow>Checking for latest Paper build...</yellow>"));
+        sender.sendMessage(ColorUtil.deserializeUncached(prefix + "<color:#478FC6>⋯</color> <color:#C2C7D3>Checking for latest Paper build...</color>"));
 
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             try {
@@ -414,7 +409,7 @@ public class LazyDialectCommand implements CommandExecutor, TabCompleter {
 
                 if (buildsRes.statusCode() != 200) {
                     sender.sendMessage(ColorUtil.deserializeUncached(
-                        prefix + "<red>Failed to fetch builds (HTTP " + buildsRes.statusCode() + ")</red>"
+                        prefix + "<color:#D1988C>✕ <color:#C2C7D3>Failed to fetch builds (HTTP " + buildsRes.statusCode() + ")</color>"
                     ));
                     return;
                 }
@@ -424,7 +419,7 @@ public class LazyDialectCommand implements CommandExecutor, TabCompleter {
                 com.fasterxml.jackson.databind.JsonNode builds = root.get("builds");
                 if (builds == null || !builds.isArray() || builds.isEmpty()) {
                     sender.sendMessage(ColorUtil.deserializeUncached(
-                        prefix + "<red>No builds found for version " + version + "</red>"
+                        prefix + "<color:#D1988C>✕ <color:#C2C7D3>No builds found for version " + version + "</color>"
                     ));
                     return;
                 }
@@ -433,7 +428,7 @@ public class LazyDialectCommand implements CommandExecutor, TabCompleter {
                 int currentBuild = Bukkit.getCurrentTick();
 
                 sender.sendMessage(ColorUtil.deserializeUncached(
-                    prefix + "<gray>Latest build:</gray> <white>" + latestBuild + "</white>"
+                    prefix + "<color:#C2C7D3>Latest build:</color> <color:#C2C7D3>" + latestBuild + "</color>"
                 ));
 
                 String jarName = "paper-" + version + "-" + latestBuild + ".jar";
@@ -441,7 +436,7 @@ public class LazyDialectCommand implements CommandExecutor, TabCompleter {
                     + "/builds/" + latestBuild + "/downloads/" + jarName;
 
                 sender.sendMessage(ColorUtil.deserializeUncached(
-                    prefix + "<yellow>Downloading " + jarName + "...</yellow>"
+                    prefix + "<color:#478FC6>⋯</color> <color:#C2C7D3>Downloading " + jarName + "...</color>"
                 ));
 
                 HttpRequest downloadReq = HttpRequest.newBuilder()
@@ -454,34 +449,34 @@ public class LazyDialectCommand implements CommandExecutor, TabCompleter {
                 ));
 
                 sender.sendMessage(ColorUtil.deserializeUncached(
-                    prefix + "<green>Downloaded to " + downloadRes.body() + "</green>"
+                    prefix + "<color:#C2C7D3>Downloaded to " + downloadRes.body() + "</color>"
                 ));
                 sender.sendMessage(ColorUtil.deserializeUncached(
-                    prefix + "<gold>Replace your server's paper.jar manually and restart the server.</gold>"
+                    prefix + "<color:#C2C7D3>Replace your server's paper.jar manually and restart the server.</color>"
                 ));
                 logger.info("Paper updated: " + version + " build " + latestBuild);
 
             } catch (java.net.http.HttpTimeoutException e) {
                 sender.sendMessage(ColorUtil.deserializeUncached(
-                    prefix + "<red>Request timed out while contacting PaperMC API.</red>"
+                    prefix + "<color:#D1988C>✕ <color:#C2C7D3>Request timed out while contacting PaperMC API.</color>"
                 ));
             } catch (java.net.ConnectException e) {
                 sender.sendMessage(ColorUtil.deserializeUncached(
-                    prefix + "<red>Could not connect to PaperMC API. Check your internet connection.</red>"
+                    prefix + "<color:#D1988C>✕ <color:#C2C7D3>Could not connect to PaperMC API. Check your internet connection.</color>"
                 ));
             } catch (java.io.IOException e) {
                 sender.sendMessage(ColorUtil.deserializeUncached(
-                    prefix + "<red>IO error: " + e.getMessage() + "</red>"
+                    prefix + "<color:#D1988C>✕ <color:#C2C7D3>IO error: " + e.getMessage() + "</color>"
                 ));
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 sender.sendMessage(ColorUtil.deserializeUncached(
-                    prefix + "<red>Download was interrupted.</red>"
+                    prefix + "<color:#D1988C>✕ <color:#C2C7D3>Download was interrupted.</color>"
                 ));
             } catch (Exception e) {
                 logger.warning("Paper update failed: " + e.getMessage());
                 sender.sendMessage(ColorUtil.deserializeUncached(
-                    prefix + "<red>Failed to update Paper: " + e.getMessage() + "</red>"
+                    prefix + "<color:#D1988C>✕ <color:#C2C7D3>Failed to update Paper: " + e.getMessage() + "</color>"
                 ));
             }
         });

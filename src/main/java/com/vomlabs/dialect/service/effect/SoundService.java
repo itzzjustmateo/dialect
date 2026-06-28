@@ -1,6 +1,5 @@
 package com.vomlabs.dialect.service.effect;
 
-import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import java.util.logging.Logger;

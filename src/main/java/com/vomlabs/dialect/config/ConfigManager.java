@@ -85,7 +85,8 @@ public class ConfigManager {
                 parseModeration(root),
                 parseRedis(root),
                 parseChatFormat(root),
-                parseEffects(root)
+                parseEffects(root),
+                parseLanguageSelection(root)
             );
         } catch (IOException e) {
             plugin.logger().severe("Error parsing config.yml: " + e.getMessage());
@@ -101,32 +102,36 @@ public class ConfigManager {
             }
             JsonNode root = yamlMapper.readTree(messagesFile);
             return new MessagesConfig(
-                getString(root, "prefix", "<gradient:#4facfe:#00f2fe>[LazyDialect]</gradient> "),
+                getString(root, "prefix", "<color:#478FC6>▸</color> <color:#C2C7D3>"),
                 getString(root, "violation_warning",
-                    "<red>Your message was not sent because it violates the server language policy.</red>"),
+                    "<color:#D1988C>✕ <color:#C2C7D3>Your message was not sent because it violates the server language policy.</color>"),
                 getString(root, "translation_format",
-                    "<gray>[Translated from {from}]: {message}</gray>"),
+                    "<color:#C2C7D3>[</color><color:#478FC6>Translated from {from}</color><color:#C2C7D3>]: {message}</color>"),
                 getString(root, "no_permission",
-                    "<red>You do not have permission to execute this command.</red>"),
+                    "<color:#D1988C>✕ <color:#C2C7D3>You do not have permission to execute this command.</color>"),
                 getString(root, "reload_success",
-                    "<green>Configuration and caches successfully reloaded.</green>"),
+                    "<color:#C2C7D3>Configuration and caches successfully reloaded.</color>"),
                 getString(root, "correction_suggested",
-                    "<gold>Did you mean:</gold> <click:suggest_command:'{correction}'"
-                    + "><hover:show_text:'<gray>Click to accept</gray>'>{correction}</hover></click>"),
+                    "<color:#C2C7D3>Did you mean?</color> <click:suggest_command:'{correction}'"
+                    + "><hover:show_text:'<color:#C2C7D3>Click to accept</color>'><color:#478FC6>{correction}</color></hover></click>"),
                 getString(root, "api_error",
-                    "<red>An error occurred while processing your request. Please try again later.</red>"),
+                    "<color:#D1988C>✕ <color:#C2C7D3>An error occurred while processing your request. Please try again later.</color>"),
                 getString(root, "rate_limited",
-                    "<red>Too many requests. Please wait before sending another message.</red>"),
+                    "<color:#D1988C>✕ <color:#C2C7D3>Too many requests. Please wait before sending another message.</color>"),
                 getString(root, "ai_unavailable",
-                    "<red>The AI service is unavailable. Please try again later.</red>"),
+                    "<color:#D1988C>✕ <color:#C2C7D3>The AI service is unavailable. Please try again later.</color>"),
+                getString(root, "language_disabled",
+                    "<color:#D1988C>✕ <color:#C2C7D3>Language selection is not available on this server.</color>"),
+                getString(root, "language_set",
+                    "<color:#C2C7D3>Language set to</color> <color:#478FC6>{lang}</color>"),
                 getString(root, "actionbar_translated",
-                    "<gray>Message translated to</gray> <lang:{lang}>{lang}</lang>"),
+                    "<color:#478FC6>⇄</color> <color:#C2C7D3>Translated</color> <color:#478FC6>{lang}</color>"),
                 getString(root, "actionbar_detected",
-                    "<gray>Detected:</gray> <lang:{lang}>{lang}</lang>"),
-                getString(root, "actionbar_blocked", "<red>Message blocked</red>"),
-                getString(root, "actionbar_warned", "<gold>Language warning issued</gold>"),
-                getString(root, "actionbar_allowed", "<green>Message sent</green>"),
-                getString(root, "actionbar_processing", "<yellow>Processing message...</yellow>")
+                    "<color:#478FC6>◈</color> <color:#C2C7D3>Detected</color> <color:#478FC6>{lang}</color>"),
+                getString(root, "actionbar_blocked", "<color:#CE5F4E>✕</color> <color:#C2C7D3>Message blocked</color>"),
+                getString(root, "actionbar_warned", "<color:#CE5F4E>⚠</color> <color:#C2C7D3>Language warning issued</color>"),
+                getString(root, "actionbar_allowed", "<color:#478FC6>✓</color> <color:#C2C7D3>Message sent</color>"),
+                getString(root, "actionbar_processing", "<color:#478FC6>⋯</color> <color:#C2C7D3>Processing message...</color>")
             );
         } catch (IOException e) {
             plugin.logger().severe("Error parsing messages.yml: " + e.getMessage());
@@ -267,6 +272,18 @@ public class ConfigManager {
         );
     }
 
+    private DialectConfig.LanguageSelectionConfig parseLanguageSelection(JsonNode root) {
+        JsonNode node = root.get("language_selection");
+        if (node == null) {
+            return new DialectConfig.LanguageSelectionConfig(false,
+                "<color:#478FC6>Select Your Language</color>");
+        }
+        return new DialectConfig.LanguageSelectionConfig(
+            getBoolean(node, "enabled", false),
+            getString(node, "gui_title", "<color:#478FC6>Select Your Language</color>")
+        );
+    }
+
     private DialectConfig.ChatFormatConfig parseChatFormat(JsonNode root) {
         JsonNode node = root.get("chat_format");
         if (node == null) {
@@ -308,7 +325,9 @@ public class ConfigManager {
             new DialectConfig.RedisConfig(false, "redis://localhost:6379", "", 2, false),
             new DialectConfig.ChatFormatConfig(
                 true, "<%luckperms_prefix%><player_name><gray>:</gray> %message%", true, true),
-            new DialectConfig.EffectsConfig(true, true)
+            new DialectConfig.EffectsConfig(true, true),
+            new DialectConfig.LanguageSelectionConfig(false,
+                "<color:#478FC6>Select Your Language</color>")
         );
     }
 

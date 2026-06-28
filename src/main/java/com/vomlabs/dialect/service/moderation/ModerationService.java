@@ -7,7 +7,6 @@ import com.vomlabs.dialect.service.ai.AiProvider;
 import com.vomlabs.dialect.service.ai.PromptBuilder;
 import com.vomlabs.dialect.service.cache.CacheService;
 import com.vomlabs.dialect.util.TextSanitizer;
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Logger;
 
@@ -89,8 +88,8 @@ public class ModerationService {
 
     private String buildRulesString() {
         StringBuilder rules = new StringBuilder();
-        rules.append("Server language mode: ").append(languageConfig.mode()).append(". ");
-        rules.append("Allowed languages: ").append(String.join(", ", languageConfig.allowed())).append(". ");
+        rules.append("Server language mode: ").append(languageConfig.mode())
+            .append(". Allowed languages: ").append(String.join(", ", languageConfig.allowed())).append(". ");
         if (moderationConfig.enableSlangValidation()) {
             rules.append("Slang validation is enabled. ");
         }

@@ -1,8 +1,6 @@
 package com.vomlabs.dialect.service.format;
 
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 import java.util.logging.Logger;
 
 public class LPCHook {

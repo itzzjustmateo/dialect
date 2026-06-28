@@ -3,12 +3,10 @@ package com.vomlabs.dialect.bootstrap;
 import com.vomlabs.dialect.api.LazyDialectAPI;
 import com.vomlabs.dialect.model.Language;
 import com.vomlabs.dialect.model.ChatMessage;
-import com.vomlabs.dialect.util.ComponentExtractor;
 import com.vomlabs.dialect.util.ColorUtil;
 import dev.faststats.ErrorTracker;
 import dev.faststats.Metrics;
 import dev.faststats.bukkit.BukkitContext;
-import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
