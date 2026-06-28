@@ -51,7 +51,9 @@ tasks {
         archiveClassifier.set("")
         archiveVersion.set(project.version.toString())
 
-        minimize()
+        minimize {
+            exclude(dependency("com.github.ben-manes.caffeine:.*"))
+        }
 
         relocate("dev.faststats", "com.vomlabs.dialect.libs.faststats")
 
