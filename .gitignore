@@ -28,3 +28,4 @@ run
 *.swo
 *.kate-swp
 bin/
+/.vscode
