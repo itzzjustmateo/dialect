@@ -64,7 +64,8 @@ public class ConfigManager {
     public Component formatMessage(String template, java.util.Map<String, String> placeholders) {
         String resolved = template;
         for (var entry : placeholders.entrySet()) {
-            resolved = resolved.replace("{" + entry.getKey() + "}", entry.getValue() != null ? entry.getValue() : "");
+            resolved = resolved.replace(
+                "{" + entry.getKey() + "}", entry.getValue() != null ? entry.getValue() : "");
         }
         return ColorUtil.deserializeUncached(resolved);
     }
@@ -101,16 +102,27 @@ public class ConfigManager {
             JsonNode root = yamlMapper.readTree(messagesFile);
             return new MessagesConfig(
                 getString(root, "prefix", "<gradient:#4facfe:#00f2fe>[LazyDialect]</gradient> "),
-                getString(root, "violation_warning", "<red>Your message was not sent because it violates the server language policy.</red>"),
-                getString(root, "translation_format", "<gray>[Translated from {from}]: {message}</gray>"),
-                getString(root, "no_permission", "<red>You do not have permission to execute this command.</red>"),
-                getString(root, "reload_success", "<green>Configuration and caches successfully reloaded.</green>"),
-                getString(root, "correction_suggested", "<gold>Did you mean:</gold> <click:suggest_command:'{correction}'><hover:show_text:'<gray>Click to accept</gray>'>{correction}</hover></click>"),
-                getString(root, "api_error", "<red>An error occurred while processing your request. Please try again later.</red>"),
-                getString(root, "rate_limited", "<red>Too many requests. Please wait before sending another message.</red>"),
-                getString(root, "ai_unavailable", "<red>The AI service is unavailable. Please try again later.</red>"),
-                getString(root, "actionbar_translated", "<gray>Message translated to</gray> <lang:{lang}>{lang}</lang>"),
-                getString(root, "actionbar_detected", "<gray>Detected:</gray> <lang:{lang}>{lang}</lang>"),
+                getString(root, "violation_warning",
+                    "<red>Your message was not sent because it violates the server language policy.</red>"),
+                getString(root, "translation_format",
+                    "<gray>[Translated from {from}]: {message}</gray>"),
+                getString(root, "no_permission",
+                    "<red>You do not have permission to execute this command.</red>"),
+                getString(root, "reload_success",
+                    "<green>Configuration and caches successfully reloaded.</green>"),
+                getString(root, "correction_suggested",
+                    "<gold>Did you mean:</gold> <click:suggest_command:'{correction}'"
+                    + "><hover:show_text:'<gray>Click to accept</gray>'>{correction}</hover></click>"),
+                getString(root, "api_error",
+                    "<red>An error occurred while processing your request. Please try again later.</red>"),
+                getString(root, "rate_limited",
+                    "<red>Too many requests. Please wait before sending another message.</red>"),
+                getString(root, "ai_unavailable",
+                    "<red>The AI service is unavailable. Please try again later.</red>"),
+                getString(root, "actionbar_translated",
+                    "<gray>Message translated to</gray> <lang:{lang}>{lang}</lang>"),
+                getString(root, "actionbar_detected",
+                    "<gray>Detected:</gray> <lang:{lang}>{lang}</lang>"),
                 getString(root, "actionbar_blocked", "<red>Message blocked</red>"),
                 getString(root, "actionbar_warned", "<gold>Language warning issued</gold>"),
                 getString(root, "actionbar_allowed", "<green>Message sent</green>"),
@@ -123,11 +135,20 @@ public class ConfigManager {
     }
 
     private static java.util.Map<String, String[]> PROVIDER_DEFAULTS = java.util.Map.of(
-        "openrouter", new String[]{"https://openrouter.ai/api/v1/chat/completions", "meta-llama/llama-3-8b-instruct:free"},
+        "openrouter", new String[]{
+            "https://openrouter.ai/api/v1/chat/completions",
+            "meta-llama/llama-3-8b-instruct:free"
+        },
         "openai", new String[]{"https://api.openai.com/v1/chat/completions", "gpt-4o-mini"},
-        "anthropic", new String[]{"https://api.anthropic.com/v1/messages", "claude-3-haiku-20240307"},
-        "gemini", new String[]{"https://generativelanguage.googleapis.com/v1beta/models", "gemini-2.0-flash"},
-        "huggingface", new String[]{"https://api-inference.huggingface.co/models", "mistralai/Mistral-7B-Instruct-v0.3"}
+        "anthropic", new String[]{
+            "https://api.anthropic.com/v1/messages", "claude-3-haiku-20240307"
+        },
+        "gemini", new String[]{
+            "https://generativelanguage.googleapis.com/v1beta/models", "gemini-2.0-flash"
+        },
+        "huggingface", new String[]{
+            "https://api-inference.huggingface.co/models", "mistralai/Mistral-7B-Instruct-v0.3"
+        }
     );
 
     private DialectConfig.AIConfig parseAI(JsonNode root) {
@@ -137,7 +158,8 @@ public class ConfigManager {
         }
 
         String provider = getString(node, "provider", "openrouter");
-        String[] defaults = PROVIDER_DEFAULTS.getOrDefault(provider, PROVIDER_DEFAULTS.get("openrouter"));
+        String[] defaults = PROVIDER_DEFAULTS.getOrDefault(
+            provider, PROVIDER_DEFAULTS.get("openrouter"));
         String defaultEndpoint = defaults[0];
         String defaultModel = defaults[1];
 
@@ -172,7 +194,8 @@ public class ConfigManager {
     private DialectConfig.LanguageConfig parseLanguages(JsonNode root) {
         JsonNode node = root.get("languages");
         if (node == null) {
-            return new DialectConfig.LanguageConfig("WHITELIST", List.of("en", "de"), "en", Action.WARN, 0.75);
+            return new DialectConfig.LanguageConfig(
+                "WHITELIST", List.of("en", "de"), "en", Action.WARN, 0.75);
         }
 
         String mode = getString(node, "mode", "WHITELIST");
@@ -247,12 +270,14 @@ public class ConfigManager {
     private DialectConfig.ChatFormatConfig parseChatFormat(JsonNode root) {
         JsonNode node = root.get("chat_format");
         if (node == null) {
-            return new DialectConfig.ChatFormatConfig(true, "<%luckperms_prefix%><player_name><gray>:</gray> %message%", true, true);
+            return new DialectConfig.ChatFormatConfig(
+                true, "<%luckperms_prefix%><player_name><gray>:</gray> %message%", true, true);
         }
 
         return new DialectConfig.ChatFormatConfig(
             getBoolean(node, "enabled", true),
-            getString(node, "template", "<%luckperms_prefix%><player_name><gray>:</gray> %message%"),
+            getString(node, "template",
+                "<%luckperms_prefix%><player_name><gray>:</gray> %message%"),
             getBoolean(node, "prefer_lpc", true),
             getBoolean(node, "prefer_lpcx", true)
         );
@@ -276,11 +301,13 @@ public class ConfigManager {
         return new DialectConfig(
             new DialectConfig.AIConfig(true, "openrouter", "", "", "", 0.1, 5, 3, 500),
             new DialectConfig.DeepLConfig("", true, 5),
-            new DialectConfig.LanguageConfig("WHITELIST", List.of("en", "de"), "en", Action.WARN, 0.75),
+            new DialectConfig.LanguageConfig(
+                "WHITELIST", List.of("en", "de"), "en", Action.WARN, 0.75),
             new DialectConfig.CacheConfig(10000, 30),
             new DialectConfig.ModerationConfig(Action.TRANSLATE, true, 2, true),
             new DialectConfig.RedisConfig(false, "redis://localhost:6379", "", 2, false),
-            new DialectConfig.ChatFormatConfig(true, "<%luckperms_prefix%><player_name><gray>:</gray> %message%", true, true),
+            new DialectConfig.ChatFormatConfig(
+                true, "<%luckperms_prefix%><player_name><gray>:</gray> %message%", true, true),
             new DialectConfig.EffectsConfig(true, true)
         );
     }
@@ -297,25 +324,33 @@ public class ConfigManager {
     }
 
     private static String getString(JsonNode node, String field, String defaultValue) {
-        if (node == null || !node.has(field)) return defaultValue;
+        if (node == null || !node.has(field)) {
+            return defaultValue;
+        }
         JsonNode value = node.get(field);
         return value != null && value.isTextual() ? value.asText() : defaultValue;
     }
 
     private static int getInt(JsonNode node, String field, int defaultValue) {
-        if (node == null || !node.has(field)) return defaultValue;
+        if (node == null || !node.has(field)) {
+            return defaultValue;
+        }
         JsonNode value = node.get(field);
         return value != null && value.isNumber() ? value.asInt() : defaultValue;
     }
 
     private static double getDouble(JsonNode node, String field, double defaultValue) {
-        if (node == null || !node.has(field)) return defaultValue;
+        if (node == null || !node.has(field)) {
+            return defaultValue;
+        }
         JsonNode value = node.get(field);
         return value != null && value.isNumber() ? value.asDouble() : defaultValue;
     }
 
     private static boolean getBoolean(JsonNode node, String field, boolean defaultValue) {
-        if (node == null || !node.has(field)) return defaultValue;
+        if (node == null || !node.has(field)) {
+            return defaultValue;
+        }
         JsonNode value = node.get(field);
         return value != null && value.isBoolean() ? value.asBoolean() : defaultValue;
     }

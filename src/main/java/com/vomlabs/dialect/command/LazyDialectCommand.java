@@ -78,7 +78,10 @@ public class LazyDialectCommand implements CommandExecutor, TabCompleter {
     }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+    public boolean onCommand(
+        @NotNull CommandSender sender, @NotNull Command command,
+        @NotNull String label, @NotNull String[] args
+    ) {
         if (args.length == 0) {
             sendHelp(sender);
             return true;
@@ -102,18 +105,21 @@ public class LazyDialectCommand implements CommandExecutor, TabCompleter {
         MessagesConfig msg = configManager.messages();
         Component prefix = ColorUtil.deserializeUncached(msg.prefix());
 
-        sender.sendMessage(prefix.append(ColorUtil.deserializeUncached("<gold>===== LazyDialect Commands =====</gold>")));
+        sender.sendMessage(prefix.append(
+            ColorUtil.deserializeUncached("<gold>===== LazyDialect Commands =====</gold>")));
 
         if (sender.hasPermission(PERMISSION_RELOAD)) {
             sender.sendMessage(prefix.append(ColorUtil.deserializeUncached(
-                "<click:run_command:'/lazydialect reload'><hover:show_text:'<gray>Click to reload</gray>'><gold>/lazydialect reload</gold></hover></click>"
+                "<click:run_command:'/lazydialect reload'>"
+                + "<hover:show_text:'<gray>Click to reload</gray>'><gold>/lazydialect reload</gold></hover></click>"
                 + " <dark_gray>-</dark_gray> <gray>Reload configuration and caches</gray>"
             )));
         }
 
         if (sender.hasPermission(PERMISSION_STATUS)) {
             sender.sendMessage(prefix.append(ColorUtil.deserializeUncached(
-                "<click:run_command:'/lazydialect status'><hover:show_text:'<gray>Click to view status</gray>'><gold>/lazydialect status</gold></hover></click>"
+                "<click:run_command:'/lazydialect status'>"
+                + "<hover:show_text:'<gray>Click to view status</gray>'><gold>/lazydialect status</gold></hover></click>"
                 + " <dark_gray>-</dark_gray> <gray>View plugin status and metrics</gray>"
             )));
         }
@@ -134,7 +140,8 @@ public class LazyDialectCommand implements CommandExecutor, TabCompleter {
 
         if (sender.hasPermission(PERMISSION_CACHE)) {
             sender.sendMessage(prefix.append(ColorUtil.deserializeUncached(
-                "<click:run_command:'/lazydialect cache clear'><hover:show_text:'<gray>Click to clear cache</gray>'><gold>/lazydialect cache clear</gold></hover></click>"
+                "<click:run_command:'/lazydialect cache clear'>"
+                + "<hover:show_text:'<gray>Click to clear cache</gray>'><gold>/lazydialect cache clear</gold></hover></click>"
                 + " <dark_gray>-</dark_gray> <gray>Clear cached data</gray>"
             )));
         }
@@ -159,7 +166,8 @@ public class LazyDialectCommand implements CommandExecutor, TabCompleter {
         } catch (Exception e) {
             logger.severe("Reload failed: " + e.getMessage());
             sender.sendMessage(ColorUtil.deserializeUncached(
-                configManager.messages().prefix() + "<red>Reload failed: " + e.getMessage() + "</red>"
+                configManager.messages().prefix()
+                + "<red>Reload failed: " + e.getMessage() + "</red>"
             ));
         }
     }
@@ -173,15 +181,18 @@ public class LazyDialectCommand implements CommandExecutor, TabCompleter {
         DialectConfig config = configManager.config();
         String prefix = configManager.messages().prefix();
 
-        sender.sendMessage(ColorUtil.deserializeUncached(prefix + "<gold>===== LazyDialect Status =====</gold>"));
+        sender.sendMessage(ColorUtil.deserializeUncached(
+            prefix + "<gold>===== LazyDialect Status =====</gold>"));
 
         boolean aiEnabled = config.ai().enabled();
         boolean apiConfigured = config.ai().isConfigured();
         sender.sendMessage(ColorUtil.deserializeUncached(
-            prefix + "<gray>AI:</gray> " + (aiEnabled ? "<green>Enabled</green>" : "<red>Disabled</red>")
+            prefix + "<gray>AI:</gray> "
+            + (aiEnabled ? "<green>Enabled</green>" : "<red>Disabled</red>")
         ));
         sender.sendMessage(ColorUtil.deserializeUncached(
-            prefix + "<gray>AI Provider:</gray> " + (apiConfigured ? "<green>Connected</green>" : "<red>Not Configured</red>")
+            prefix + "<gray>AI Provider:</gray> "
+            + (apiConfigured ? "<green>Connected</green>" : "<red>Not Configured</red>")
         ));
         if (apiConfigured) {
             sender.sendMessage(ColorUtil.deserializeUncached(
@@ -193,20 +204,25 @@ public class LazyDialectCommand implements CommandExecutor, TabCompleter {
             prefix + "<gray>Language Mode:</gray> <white>" + config.languages().mode() + "</white>"
         ));
         sender.sendMessage(ColorUtil.deserializeUncached(
-            prefix + "<gray>Allowed Languages:</gray> <white>" + String.join(", ", config.languages().allowed()) + "</white>"
+            prefix + "<gray>Allowed Languages:</gray> <white>"
+            + String.join(", ", config.languages().allowed()) + "</white>"
         ));
         sender.sendMessage(ColorUtil.deserializeUncached(
-            prefix + "<gray>Default Language:</gray> <white>" + config.languages().serverDefault() + "</white>"
+            prefix + "<gray>Default Language:</gray> <white>"
+            + config.languages().serverDefault() + "</white>"
         ));
         sender.sendMessage(ColorUtil.deserializeUncached(
-            prefix + "<gray>Violation Action:</gray> <white>" + config.moderation().onViolation().name() + "</white>"
+            prefix + "<gray>Violation Action:</gray> <white>"
+            + config.moderation().onViolation().name() + "</white>"
         ));
 
         sender.sendMessage(ColorUtil.deserializeUncached(
-            prefix + "<gray>User Cache:</gray> <white>" + cacheService.userLanguageCacheSize() + " entries</white>"
+            prefix + "<gray>User Cache:</gray> <white>"
+            + cacheService.userLanguageCacheSize() + " entries</white>"
         ));
         sender.sendMessage(ColorUtil.deserializeUncached(
-            prefix + "<gray>Analysis Cache:</gray> <white>" + cacheService.analysisCacheSize() + " entries</white>"
+            prefix + "<gray>Analysis Cache:</gray> <white>"
+            + cacheService.analysisCacheSize() + " entries</white>"
         ));
 
         int remaining = aiProvider.getRateLimiter().getRemainingRequests();
@@ -233,19 +249,25 @@ public class LazyDialectCommand implements CommandExecutor, TabCompleter {
 
         Player targetPlayer = sender instanceof Player ? (Player) sender : null;
         if (targetPlayer == null) {
-            sender.sendMessage(ColorUtil.deserializeUncached(prefix + "<red>This command must be used as a player.</red>"));
+            sender.sendMessage(ColorUtil.deserializeUncached(
+                prefix + "<red>This command must be used as a player.</red>"));
             return;
         }
 
-        ChatMessage msg = ChatMessage.builder(targetPlayer.getUniqueId(), targetPlayer.getName(), text, ColorUtil.deserializeUncached(text)).build();
+        ChatMessage msg = ChatMessage.builder(
+            targetPlayer.getUniqueId(), targetPlayer.getName(),
+            text, ColorUtil.deserializeUncached(text)
+        ).build();
 
         detectionService.detect(msg).thenAccept(result -> {
             result.detectedLanguage().ifPresentOrElse(lang -> {
                 sender.sendMessage(ColorUtil.deserializeUncached(
-                    prefix + "<gray>Detected Language:</gray> <white>" + lang.code() + " (" + lang.displayName() + ")</white>"
+                    prefix + "<gray>Detected Language:</gray> <white>"
+                    + lang.code() + " (" + lang.displayName() + ")</white>"
                 ));
                 sender.sendMessage(ColorUtil.deserializeUncached(
-                    prefix + "<gray>Confidence:</gray> <white>" + String.format("%.2f", result.confidence()) + "</white>"
+                    prefix + "<gray>Confidence:</gray> <white>"
+                    + String.format("%.2f", result.confidence()) + "</white>"
                 ));
                 sender.sendMessage(ColorUtil.deserializeUncached(
                     prefix + "<gray>Contains Slang:</gray> <white>" + result.containsSlang() + "</white>"

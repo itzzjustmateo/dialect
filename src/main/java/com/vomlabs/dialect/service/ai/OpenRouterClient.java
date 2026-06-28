@@ -194,7 +194,9 @@ public class OpenRouterClient implements AiProvider {
             JsonNode error = root.get("error");
             if (error != null) {
                 JsonNode message = error.get("message");
-                if (message != null && message.isTextual()) return message.asText();
+                if (message != null && message.isTextual()) {
+                    return message.asText();
+                }
             }
         } catch (Exception ignored) {}
         return "Unknown error (HTTP body: " + (body != null ? body.substring(0, Math.min(100, body.length())) : "empty") + ")";

@@ -16,7 +16,10 @@ public class TranslationEvent extends PlayerEvent implements Cancellable {
     private String translatedText;
     private boolean cancelled;
 
-    public TranslationEvent(@NotNull Player player, String originalText, String sourceLanguage, String targetLanguage, String translatedText) {
+    public TranslationEvent(
+        @NotNull Player player, String originalText, String sourceLanguage,
+        String targetLanguage, String translatedText
+    ) {
         super(player);
         this.originalText = originalText;
         this.sourceLanguage = sourceLanguage;

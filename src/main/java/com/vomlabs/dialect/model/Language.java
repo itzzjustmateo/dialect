@@ -61,7 +61,9 @@ public record Language(String code, String displayName) {
     }
 
     public static Optional<Language> fromCode(String code) {
-        if (code == null || code.isBlank()) return Optional.empty();
+        if (code == null || code.isBlank()) {
+            return Optional.empty();
+        }
         String normalized = code.toLowerCase(Locale.ROOT).trim();
         return Optional.ofNullable(
             CACHE.computeIfAbsent(normalized, key -> {

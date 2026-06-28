@@ -30,7 +30,8 @@ public class LazyDialectPlugin extends JavaPlugin implements LazyDialectAPI {
 
         this.ready = true;
         logger.info("LazyDialect v" + getPluginMeta().getVersion() + " enabled successfully.");
-        logger.info("AI configured: " + dependencyInjector.getConfigManager().config().ai().isConfigured());
+        logger.info("AI configured: "
+            + dependencyInjector.getConfigManager().config().ai().isConfigured());
     }
 
     @Override
@@ -82,11 +83,14 @@ public class LazyDialectPlugin extends JavaPlugin implements LazyDialectAPI {
     }
 
     @Override
-    public CompletableFuture<String> translate(String text, String sourceLanguage, String targetLanguage) {
+    public CompletableFuture<String> translate(
+        String text, String sourceLanguage, String targetLanguage
+    ) {
         if (!ready) {
             return CompletableFuture.failedFuture(new IllegalStateException("Plugin is not ready"));
         }
-        return dependencyInjector.getTranslationService().translate(text, sourceLanguage, targetLanguage);
+        return dependencyInjector.getTranslationService()
+            .translate(text, sourceLanguage, targetLanguage);
     }
 
     @Override

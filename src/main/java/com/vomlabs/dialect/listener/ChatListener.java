@@ -86,7 +86,9 @@ public class ChatListener implements Listener {
         event.setCancelled(true);
 
         String plainText = ComponentExtractor.extractAndNormalize(event.message());
-        if (plainText.isBlank()) return;
+        if (plainText.isBlank()) {
+            return;
+        }
 
         ChatMessage initialMessage = ChatMessage.builder(player.getUniqueId(), player.getName(), plainText, event.message()).build();
 
@@ -213,7 +215,9 @@ public class ChatListener implements Listener {
 
     private void notifyStaff(Player player, ChatMessage message, String reason) {
         var modConfig = configManager.config().moderation();
-        if (!modConfig.notifyStaff()) return;
+        if (!modConfig.notifyStaff()) {
+            return;
+        }
 
         String langCode = message.detectedLanguage().map(Language::code).orElse("unknown");
         String staffMsg = "<gold>[Staff]</gold> <red>" + player.getName() + "</red> <gray>sent a message in</gray> <lang:" + langCode + ">" + langCode + "</lang>: "

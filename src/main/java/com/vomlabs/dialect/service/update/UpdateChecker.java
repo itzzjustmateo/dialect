@@ -48,8 +48,12 @@ public class UpdateChecker {
         BukkitScheduler scheduler = Bukkit.getScheduler();
         scheduler.runTaskAsynchronously(plugin, () -> {
             try {
-                if (checkModrinth()) return;
-                if (checkGithub()) return;
+                if (checkModrinth()) {
+                    return;
+                }
+                if (checkGithub()) {
+                    return;
+                }
                 logger.info("Update check: could not reach Modrinth or GitHub APIs.");
             } catch (Exception e) {
                 logger.warning("Update check failed: " + e.getMessage());

@@ -175,7 +175,9 @@ public class HuggingFaceProvider implements AiProvider {
         try {
             JsonNode root = objectMapper.readTree(body);
             JsonNode error = root.get("error");
-            if (error != null && error.isTextual()) return error.asText();
+            if (error != null && error.isTextual()) {
+                return error.asText();
+            }
         } catch (Exception ignored) {}
         return "Unknown error (HTTP body: " + (body != null ? body.substring(0, Math.min(100, body.length())) : "empty") + ")";
     }

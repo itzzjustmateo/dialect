@@ -23,7 +23,8 @@ public record DialectConfig(
             deepl = new DeepLConfig("", true, 5);
         }
         if (languages == null) {
-            languages = new LanguageConfig("WHITELIST", List.of("en", "de"), "en", Action.WARN, 0.75);
+            languages = new LanguageConfig(
+                "WHITELIST", List.of("en", "de"), "en", Action.WARN, 0.75);
         }
         if (cache == null) {
             cache = new CacheConfig(10000, 30);
@@ -35,7 +36,8 @@ public record DialectConfig(
             redis = new RedisConfig(false, "redis://localhost:6379", "", 2, false);
         }
         if (chatFormat == null) {
-            chatFormat = new ChatFormatConfig(true, "<%luckperms_prefix%><player_name><gray>:</gray> %message%", true, true);
+            chatFormat = new ChatFormatConfig(
+                true, "<%luckperms_prefix%><player_name><gray>:</gray> %message%", true, true);
         }
         if (effects == null) {
             effects = new EffectsConfig(true, true);
@@ -54,7 +56,8 @@ public record DialectConfig(
         int backoffBaseMs
     ) {
         public boolean isConfigured() {
-            return enabled && apiKey != null && !apiKey.isBlank() && !apiKey.equals("your-key-here");
+            return enabled && apiKey != null && !apiKey.isBlank()
+                && !apiKey.equals("your-key-here");
         }
     }
 

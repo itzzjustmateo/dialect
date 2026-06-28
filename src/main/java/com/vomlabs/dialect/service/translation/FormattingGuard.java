@@ -21,7 +21,9 @@ public class FormattingGuard {
     }
 
     public String tokenize(String input) {
-        if (input == null || input.isEmpty()) return input;
+        if (input == null || input.isEmpty()) {
+            return input;
+        }
         tokens.clear();
 
         Matcher matcher = ALL_PATTERNS.matcher(input);

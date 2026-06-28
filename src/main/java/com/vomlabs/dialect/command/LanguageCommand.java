@@ -28,7 +28,10 @@ public class LanguageCommand implements CommandExecutor, TabCompleter {
     @SuppressWarnings("unused")
     private final Logger logger;
 
-    public LanguageCommand(CacheService cacheService, ConfigManager configManager, SoundService soundService, ParticleService particleService, Logger logger) {
+    public LanguageCommand(
+        CacheService cacheService, ConfigManager configManager,
+        SoundService soundService, ParticleService particleService, Logger logger
+    ) {
         this.cacheService = cacheService;
         this.configManager = configManager;
         this.soundService = soundService;
@@ -37,14 +40,21 @@ public class LanguageCommand implements CommandExecutor, TabCompleter {
     }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+    public boolean onCommand(
+        @NotNull CommandSender sender, @NotNull Command command,
+        @NotNull String label, @NotNull String[] args
+    ) {
         if (!(sender instanceof Player player)) {
-            sender.sendMessage(ColorUtil.deserializeUncached(configManager.messages().prefix() + "<red>This command can only be used by players.</red>"));
+            sender.sendMessage(ColorUtil.deserializeUncached(
+                configManager.messages().prefix()
+                + "<red>This command can only be used by players.</red>"));
             return true;
         }
 
         if (!player.hasPermission("lazydialect.command.language")) {
-            player.sendMessage(ColorUtil.deserializeUncached(configManager.messages().prefix() + configManager.messages().noPermission()));
+            player.sendMessage(ColorUtil.deserializeUncached(
+                configManager.messages().prefix()
+                + configManager.messages().noPermission()));
             return true;
         }
 
@@ -52,11 +62,14 @@ public class LanguageCommand implements CommandExecutor, TabCompleter {
             Optional<Language> current = cacheService.getUserLanguage(player.getUniqueId());
             if (current.isPresent()) {
                 player.sendMessage(ColorUtil.deserializeUncached(
-                    configManager.messages().prefix() + "<gray>Your current language: <lang:" + current.get().code() + ">" + current.get().displayName() + "</lang></gray>"
+                    configManager.messages().prefix()
+                    + "<gray>Your current language: <lang:" + current.get().code()
+                    + ">" + current.get().displayName() + "</lang></gray>"
                 ));
             } else {
                 player.sendMessage(ColorUtil.deserializeUncached(
-                    configManager.messages().prefix() + "<gray>You have not set a preferred language.</gray>"
+                    configManager.messages().prefix()
+                    + "<gray>You have not set a preferred language.</gray>"
                 ));
             }
             return true;
@@ -67,7 +80,9 @@ public class LanguageCommand implements CommandExecutor, TabCompleter {
 
         if (language.isEmpty()) {
             player.sendMessage(ColorUtil.deserializeUncached(
-                configManager.messages().prefix() + "<red>Invalid language code: " + langCode + ". Use ISO 639-1 codes (e.g., en, es, fr).</red>"
+                configManager.messages().prefix()
+                + "<red>Invalid language code: " + langCode
+                + ". Use ISO 639-1 codes (e.g., en, es, fr).</red>"
             ));
             return true;
         }
@@ -87,7 +102,9 @@ public class LanguageCommand implements CommandExecutor, TabCompleter {
 
         cacheService.setUserLanguage(player.getUniqueId(), language.get());
         player.sendMessage(ColorUtil.deserializeUncached(
-            configManager.messages().prefix() + "<green>Language set to <lang:" + language.get().code() + ">" + language.get().displayName() + "</lang>.</green>"
+            configManager.messages().prefix()
+            + "<green>Language set to <lang:" + language.get().code()
+            + ">" + language.get().displayName() + "</lang>.</green>"
         ));
         soundService.playLanguageSet(player);
         particleService.spawnLanguageParticles(player);
@@ -96,12 +113,18 @@ public class LanguageCommand implements CommandExecutor, TabCompleter {
     }
 
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+    public List<String> onTabComplete(
+        @NotNull CommandSender sender, @NotNull Command command,
+        @NotNull String alias, @NotNull String[] args
+    ) {
         if (args.length == 1) {
             String input = args[0].toLowerCase();
             List<String> completions = new ArrayList<>();
-            List.of("en", "es", "fr", "de", "it", "pt", "ru", "zh", "ja", "ko", "ar", "nl", "pl", "tr", "vi", "th", "sv", "da", "fi", "no", "cs", "hu", "ro", "uk", "el", "he", "hi", "id", "ms")
-                .forEach(lang -> {
+            List.of(
+                "en", "es", "fr", "de", "it", "pt", "ru", "zh", "ja", "ko",
+                "ar", "nl", "pl", "tr", "vi", "th", "sv", "da", "fi", "no",
+                "cs", "hu", "ro", "uk", "el", "he", "hi", "id", "ms"
+            ).forEach(lang -> {
                     if (lang.startsWith(input)) completions.add(lang);
                 });
             return completions;

@@ -158,7 +158,9 @@ public class DeepLClient {
     }
 
     private String normalizeLanguageCode(String code) {
-        if (code == null || code.isBlank()) return null;
+        if (code == null || code.isBlank()) {
+            return null;
+        }
         String upper = code.toUpperCase().trim();
         return switch (upper) {
             case "EN" -> "EN";

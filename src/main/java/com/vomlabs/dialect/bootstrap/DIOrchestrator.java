@@ -128,7 +128,9 @@ public class DIOrchestrator {
             cacheService, aiProvider, soundService, particleService, logger
         );
 
-        languageCommand = new LanguageCommand(cacheService, configManager, soundService, particleService, logger);
+        languageCommand = new LanguageCommand(
+            cacheService, configManager, soundService, particleService, logger
+        );
 
         logProviderStatus();
         registerListeners();
@@ -214,25 +216,32 @@ public class DIOrchestrator {
 
         if (hasOpenRouter) {
             String provider = configManager.config().ai().provider();
-            logger.info("AI provider: " + provider + " (" + configManager.config().ai().model() + ")");
+            logger.info("AI provider: " + provider + " ("
+                + configManager.config().ai().model() + ")");
         } else if (hasDeepL) {
             logger.info("Translation provider: DeepL (fallback mode)");
         } else if (aiEnabled) {
-            logger.warning("No AI provider configured. Set 'ai.api_key' or 'deepl.api_key' in config.yml");
+            logger.warning("No AI provider configured. Set 'ai.api_key'"
+                + " or 'deepl.api_key' in config.yml");
         }
 
         if (hasRedis) {
-            logger.info("Redis caching: " + (redisService.isConnected() ? "Connected" : "Disconnected"));
+            logger.info("Redis caching: "
+                + (redisService.isConnected() ? "Connected" : "Disconnected"));
         }
 
         if (vaultHook.isAvailable()) {
             logger.info("Vault hook: available");
         }
         if (worldGuardHook.isAnyAvailable()) {
-            logger.info("WorldGuard/WE hook: WG=" + worldGuardHook.isWorldGuardAvailable() + " WE=" + worldGuardHook.isWorldEditAvailable());
+            logger.info("WorldGuard/WE hook: WG="
+                + worldGuardHook.isWorldGuardAvailable()
+                + " WE=" + worldGuardHook.isWorldEditAvailable());
         }
         if (geyserHook.isGeyserAvailable() || geyserHook.isFloodgateAvailable()) {
-            logger.info("Geyser/Floodgate hook: Geyser=" + geyserHook.isGeyserAvailable() + " Floodgate=" + geyserHook.isFloodgateAvailable());
+            logger.info("Geyser/Floodgate hook: Geyser="
+                + geyserHook.isGeyserAvailable()
+                + " Floodgate=" + geyserHook.isFloodgateAvailable());
         }
     }
 
