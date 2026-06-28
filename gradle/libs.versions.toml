@@ -1,5 +1,5 @@
 [versions]
-paper-api = "1.21.11-R0.1-SNAPSHOT"
+paper-api = "26.1.2.build.72-stable"
 minecraft = "1.21.11"
 adventure-api = "5.2.0"
 adventure-minimessage = "5.2.0"
