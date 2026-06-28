@@ -16,6 +16,7 @@ repositories {
     mavenCentral()
     maven("https://repo.papermc.io/repository/maven-public/")
     maven("https://oss.sonatype.org/content/repositories/snapshots/")
+    maven("https://repo.faststats.dev/releases")
 }
 
 dependencies {
@@ -28,6 +29,7 @@ dependencies {
     implementation(libs.jackson.dataformat.yaml)
     implementation(libs.caffeine)
     implementation(libs.jedis)
+    implementation("dev.faststats.metrics:bukkit:0.27.1")
 
     testImplementation(libs.junit.jupiter)
     testImplementation(libs.mockito.core)
@@ -50,6 +52,8 @@ tasks {
         archiveVersion.set(project.version.toString())
 
         minimize()
+
+        relocate("dev.faststats", "com.vomlabs.dialect.libs.faststats")
 
         mergeServiceFiles()
         exclude("META-INF/INDEX.LIST")

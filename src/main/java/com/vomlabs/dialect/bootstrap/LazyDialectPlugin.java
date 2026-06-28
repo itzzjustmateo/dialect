@@ -5,6 +5,9 @@ import com.vomlabs.dialect.model.Language;
 import com.vomlabs.dialect.model.ChatMessage;
 import com.vomlabs.dialect.util.ComponentExtractor;
 import com.vomlabs.dialect.util.ColorUtil;
+import dev.faststats.ErrorTracker;
+import dev.faststats.Metrics;
+import dev.faststats.bukkit.BukkitContext;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -15,6 +18,15 @@ import java.util.concurrent.CompletableFuture;
 import java.util.logging.Logger;
 
 public class LazyDialectPlugin extends JavaPlugin implements LazyDialectAPI {
+
+    public static final ErrorTracker ERROR_TRACKER = ErrorTracker.contextAware();
+
+    private final BukkitContext fastStatsContext = new BukkitContext.Factory(
+        this, "22610ed0f310522c01cf9c94d263dcd7"
+    )
+        .errorTrackerService(ERROR_TRACKER)
+        .metrics(Metrics.Factory::create)
+        .create();
 
     private DIOrchestrator dependencyInjector;
     private boolean ready;
@@ -28,6 +40,8 @@ public class LazyDialectPlugin extends JavaPlugin implements LazyDialectAPI {
         this.dependencyInjector = new DIOrchestrator(this);
         this.dependencyInjector.initialize();
 
+        fastStatsContext.ready();
+
         this.ready = true;
         logger.info("LazyDialect v" + getPluginMeta().getVersion() + " enabled successfully.");
         logger.info("AI configured: "
@@ -40,6 +54,7 @@ public class LazyDialectPlugin extends JavaPlugin implements LazyDialectAPI {
         if (dependencyInjector != null) {
             dependencyInjector.shutdown();
         }
+        fastStatsContext.shutdown();
         logger.info("LazyDialect disabled.");
     }
 
